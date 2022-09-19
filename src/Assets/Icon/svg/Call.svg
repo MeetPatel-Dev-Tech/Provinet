@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="43" height="43" viewBox="0 0 43 43">
+  <defs>
+    <filter id="Rectangle_6088" x="0" y="0" width="43" height="43" filterUnits="userSpaceOnUse">
+      <feOffset dy="2" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#717578" flood-opacity="0.11"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_24708" data-name="Group 24708" transform="translate(-321 -729)">
+    <g transform="matrix(1, 0, 0, 1, 321, 729)" filter="url(#Rectangle_6088)">
+      <rect id="Rectangle_6088-2" data-name="Rectangle 6088" width="25" height="25" rx="5" transform="translate(9 7)" fill="#fff"/>
+    </g>
+    <path id="Icon_feather-phone-call" data-name="Icon feather-phone-call" d="M10.753,3.845a2.931,2.931,0,0,1,2.316,2.316M10.753,1.5a5.277,5.277,0,0,1,4.661,4.655m-.586,4.679v1.759a1.173,1.173,0,0,1-1.278,1.173,11.6,11.6,0,0,1-5.06-1.8A11.433,11.433,0,0,1,4.972,8.448a11.6,11.6,0,0,1-1.8-5.083A1.173,1.173,0,0,1,4.339,2.086H6.1A1.173,1.173,0,0,1,7.271,3.095a7.528,7.528,0,0,0,.41,1.647,1.173,1.173,0,0,1-.264,1.237l-.745.745a9.381,9.381,0,0,0,3.518,3.518l.745-.745a1.173,1.173,0,0,1,1.237-.264,7.528,7.528,0,0,0,1.647.41A1.173,1.173,0,0,1,14.828,10.834Z" transform="translate(333.332 741)" fill="none" stroke="#646c7d" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"/>
+  </g>
+</svg>

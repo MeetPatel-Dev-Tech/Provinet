@@ -1,0 +1,39 @@
+{
+    "project_info": {
+      "project_number": "963383867293",
+      "project_id": "jayrjatesting",
+      "storage_bucket": "jayrjatesting.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:963383867293:android:0cb2697f5b6e9b9879a174",
+          "android_client_info": {
+            "package_name": "com.provitious"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "963383867293-9lh1f6hufrdv5n74ijnievbmttubi5ln.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyCa5C10S0qC5pHiHfEE54efAhtNwolW-7Y"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "963383867293-9lh1f6hufrdv5n74ijnievbmttubi5ln.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

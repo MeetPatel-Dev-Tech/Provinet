@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="86" height="86" viewBox="0 0 86 86">
+  <defs>
+    <filter id="Rectangle_6248" x="0" y="0" width="86" height="86" filterUnits="userSpaceOnUse">
+      <feOffset dy="2" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#717578" flood-opacity="0.11"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_24693" data-name="Group 24693" transform="translate(-274 -177)">
+    <g id="Group_24689" data-name="Group 24689" transform="translate(283.215 184.108)">
+      <g transform="matrix(1, 0, 0, 1, -9.22, -7.11)" filter="url(#Rectangle_6248)">
+        <rect id="Rectangle_6248-2" data-name="Rectangle 6248" width="68" height="68" rx="10" transform="translate(9 7)" fill="#00e6df"/>
+      </g>
+    </g>
+    <g id="Icon_ionic-ios-chatbubbles" data-name="Icon ionic-ios-chatbubbles" transform="translate(300.625 201.625)">
+      <path id="Path_317993" data-name="Path 317993" d="M28.093,20.626a1.533,1.533,0,0,1,.209-.772,2.132,2.132,0,0,1,.133-.2,10.254,10.254,0,0,0,1.747-5.715A10.765,10.765,0,0,0,19.189,3.375a10.917,10.917,0,0,0-10.777,8.41,10.17,10.17,0,0,0-.234,2.164A10.735,10.735,0,0,0,19,24.651a13.033,13.033,0,0,0,2.987-.487c.715-.2,1.424-.456,1.607-.525a1.673,1.673,0,0,1,.589-.108,1.645,1.645,0,0,1,.639.127l3.588,1.272a.856.856,0,0,0,.247.063.5.5,0,0,0,.506-.506.813.813,0,0,0-.032-.171Z" transform="translate(-0.48)" fill="#fff" stroke="#00e6df" stroke-width="1.5"/>
+      <path id="Path_317994" data-name="Path 317994" d="M20.493,26.129c-.228.063-.519.133-.835.2a11.68,11.68,0,0,1-2.152.285,10.735,10.735,0,0,1-10.822-10.7A11.964,11.964,0,0,1,6.78,14.56c.038-.272.082-.544.146-.81.063-.285.139-.57.221-.848l-.506.449a9.418,9.418,0,0,0-3.265,7.081,9.313,9.313,0,0,0,1.569,5.189c.146.221.228.392.2.506s-.753,3.924-.753,3.924a.508.508,0,0,0,.171.487.516.516,0,0,0,.323.114.454.454,0,0,0,.184-.038l3.55-1.4a.989.989,0,0,1,.759.013,10.651,10.651,0,0,0,3.841.759,9.939,9.939,0,0,0,7.6-3.487s.2-.278.437-.608C21.025,25.977,20.759,26.059,20.493,26.129Z" transform="translate(0 -0.952)" fill="#fff" stroke="#00e6df" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

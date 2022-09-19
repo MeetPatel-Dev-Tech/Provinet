@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="43" height="43" viewBox="0 0 43 43">
+  <defs>
+    <filter id="Rectangle_6087" x="0" y="0" width="43" height="43" filterUnits="userSpaceOnUse">
+      <feOffset dy="2" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#717578" flood-opacity="0.11"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_24709" data-name="Group 24709" transform="translate(-321 -647)">
+    <g transform="matrix(1, 0, 0, 1, 321, 647)" filter="url(#Rectangle_6087)">
+      <rect id="Rectangle_6087-2" data-name="Rectangle 6087" width="25" height="25" rx="5" transform="translate(9 7)" fill="#00e6df"/>
+    </g>
+    <g id="Icon_feather-video" data-name="Icon feather-video" transform="translate(334.5 654.5)">
+      <path id="Path_317974" data-name="Path 317974" d="M28.375,10.5,24,13.625l4.375,3.125Z" transform="translate(-13.126 -1.75)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"/>
+      <path id="Path_317975" data-name="Path 317975" d="M2.75,7.5H9.624a1.25,1.25,0,0,1,1.25,1.25V15a1.25,1.25,0,0,1-1.25,1.25H2.75A1.25,1.25,0,0,1,1.5,15V8.75A1.25,1.25,0,0,1,2.75,7.5Z" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"/>
+    </g>
+  </g>
+</svg>

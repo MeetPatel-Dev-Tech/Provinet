@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31">
+  <g id="Group_24712" data-name="Group 24712" transform="translate(0 -0.091)">
+    <g id="Group_24710" data-name="Group 24710">
+      <g id="Ellipse_2487" data-name="Ellipse 2487" transform="translate(0 0.091)" fill="#00e6df" stroke="#fff" stroke-width="2">
+        <circle cx="15.5" cy="15.5" r="15.5" stroke="none"/>
+        <circle cx="15.5" cy="15.5" r="14.5" fill="none"/>
+      </g>
+      <path id="Icon_awesome-check" data-name="Icon awesome-check" d="M5.942,17.366.256,11.681a.875.875,0,0,1,0-1.237L1.493,9.207a.875.875,0,0,1,1.237,0l3.83,3.83,8.2-8.2a.875.875,0,0,1,1.237,0L17.238,6.07a.875.875,0,0,1,0,1.237L7.179,17.366A.875.875,0,0,1,5.942,17.366Z" transform="translate(6.708 4.355)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="62" height="62" viewBox="0 0 62 62">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.038" y1="0.174" x2="0.675" y2="1.085" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#00e6df"/>
+      <stop offset="1" stop-color="#37ffff"/>
+    </linearGradient>
+    <filter id="Rectangle_6077" x="0" y="0" width="62" height="62" filterUnits="userSpaceOnUse">
+      <feOffset dy="2" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#717578" flood-opacity="0.11"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_24621" data-name="Group 24621" transform="translate(-306 -736)">
+    <g transform="matrix(1, 0, 0, 1, 306, 736)" filter="url(#Rectangle_6077)">
+      <rect id="Rectangle_6077-2" data-name="Rectangle 6077" width="44" height="44" rx="22" transform="translate(9 7)" fill="url(#linear-gradient)"/>
+    </g>
+    <path id="Icon_feather-message-square" data-name="Icon feather-message-square" d="M21.814,16.043a1.924,1.924,0,0,1-1.924,1.924H8.348L4.5,21.814V6.424A1.924,1.924,0,0,1,6.424,4.5H19.891a1.924,1.924,0,0,1,1.924,1.924Z" transform="translate(324 752)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  </g>
+</svg>
