@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import { View, Text, SafeAreaView, ScrollView, TextInput, FlatList, TouchableOpacity, Platform, Image, SliderBase, Alert } from "react-native"
+import { View, Text, Animated, Easing, SafeAreaView, Dimensions, ScrollView, TextInput, FlatList, TouchableOpacity, Platform, Image, SliderBase, Alert } from "react-native"
 import Octicons from 'react-native-vector-icons/Octicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 // import { TextInput } from 'react-native-paper';
 import ProgressLoader from 'rn-progress-loader';
 import { useIsFocused, useFocusEffect } from '@react-navigation/native';
-import Animated, { FadeIn, useAnimatedStyle, FadeOut, Layout, RollInLeft, ZoomIn, ZoomInRotate, ZoomOut } from "react-native-reanimated";
+// import Animated, { FadeIn, useAnimatedStyle, FadeOut, Layout, RollInLeft, ZoomIn, ZoomInRotate, ZoomOut } from "react-native-reanimated";
 import { io } from "socket.io-client";
 import { GetApi, PostApi } from '../../../../Api/Api';
 import CommonStyle from '../../../../CommonFiles/CommonStyle';
@@ -21,7 +21,6 @@ export default function ChatListScreen({ navigation, route }) {
     const [loading, setLoading] = useState(false);
     const [userChatList, setUserChatList] = useState('');
     const [userSearch, setuserSearch] = useState('');
-    const [count, setCount] = useState('');
     const { storeData, setStoreData } = useContext(CredentialsContext);
     const { group, setGroup } = useContext(CredentialsContext);
     const isFocused = useIsFocused();
@@ -35,6 +34,12 @@ export default function ChatListScreen({ navigation, route }) {
     });
 
     console.log('useIsFocused', useIsFocused())
+
+    useEffect(() => {
+        if (storeData == false) {
+            fadeOut()
+        }
+    }, [storeData]);
 
 
     useFocusEffect(
@@ -54,6 +59,7 @@ export default function ChatListScreen({ navigation, route }) {
         setUserChatList(response.result)
         setuserSearch(response.result)
     })
+
 
 
     const onPress = (item) => {
@@ -147,6 +153,31 @@ export default function ChatListScreen({ navigation, route }) {
         )
     }
 
+    // const trans = interpolate({
+    //     inputRange: [0, 50, 100, 101],
+    //     outputRange: [-20, 0, 0, 1],
+    // });
+
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
+    const fadeOut = () => {
+        // Will change fadeAnim value to 0 in 3 seconds
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 700,
+            easing: Easing.bezier(.07, 1, .33, .89),
+            useNativeDriver: true
+        }).start();
+    };
+    const fadeIn = () => {
+        // Will change fadeAnim value to 0 in 3 seconds
+        Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 700,
+            useNativeDriver: true
+        }).start();
+    };
+
     return (
         <SafeAreaView >
             <ProgressLoader
@@ -165,7 +196,7 @@ export default function ChatListScreen({ navigation, route }) {
                 style={{ marginTop: storeData == false ? 60 : 0 }}
             />
             {storeData == false &&
-                <View
+                <Animated.View
                     // entering={FadeIn}
                     // exiting={FadeIn.delay(500)}
                     // layout={Layout.delay(200)}
@@ -180,10 +211,23 @@ export default function ChatListScreen({ navigation, route }) {
                         shadowOffset: { width: 2, height: 5 },
                         shadowOpacity: 1,
                         shadowRadius: 2,
-                        elevation: 5
+                        elevation: 5, opacity: fadeAnim,
+                        transform: [{
+                            translateX: fadeAnim.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [Dimensions.get('window').width, 0]  // 0 : 150, 0.5 : 75, 1 : 0
+                            }),
+                        }]
                     }}>
                     <View style={{ marginLeft: 20 }}>
-                        <TouchableOpacity onPress={() => { setStoreData(true), socket.emit('getuserlist', CommonUtilsObj.EmployeDetails[0].user) }}>
+                        <TouchableOpacity onPress={() => {
+                            fadeIn(),
+                                setTimeout(() => {
+                                    setStoreData(true),
+                                        socket.emit('getuserlist', CommonUtilsObj.EmployeDetails[0].user)
+                                }, 300);
+                        }}>
+                            {/* <TouchableOpacity onPress={() => { fadeOut() }}> */}
                             <MaterialCommunityIcons name='keyboard-backspace' size={30} color='black' />
                         </TouchableOpacity>
                     </View>
@@ -204,7 +248,7 @@ export default function ChatListScreen({ navigation, route }) {
                             }}
                         />
                     </View>
-                </View>
+                </Animated.View>
             }
 
             <Modal

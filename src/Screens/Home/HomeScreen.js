@@ -42,7 +42,7 @@ export default function HomeScreen({ }) {
         { name: 'Client', id: 8, image: <Clients height={75} width={75} /> },
         { name: 'Salary', id: 9, image: <Salarys height={75} width={75} /> },
         { name: 'Approvals', id: 10, image: <Salarys height={75} width={75} /> },
-        {},
+        { name: 'Expense & Claims', id: 10, image: <Salarys height={75} width={75} /> },
         {},
     ]
 
@@ -110,6 +110,10 @@ export default function HomeScreen({ }) {
             return navigation.navigate('UserList')
         } else if (item.name == 'Approvals') {
             return navigation.navigate('Approvals')
+        } else if (item.name == 'Daily Report') {
+            return navigation.navigate('DailyReport')
+        } else if (item.name == 'Expense & Claims') {
+            return navigation.navigate('ExpenseAndClaims')
         }
     }
 
@@ -381,7 +385,7 @@ export default function HomeScreen({ }) {
                             </View>
                         </View>
                         <View style={{
-                            marginTop: 25, padding: 10, borderRadius: 10, backgroundColor: 'white', shadowColor: 'black',
+                            marginTop: 25, paddingVertical: 10, borderRadius: 10, backgroundColor: 'white', shadowColor: 'black',
                             shadowOffset: { width: 2, height: 5 },
                             shadowOpacity: 1,
                             shadowRadius: 2,
@@ -400,65 +404,6 @@ export default function HomeScreen({ }) {
                                 {Icon()}  Welcome to provitious team have a nice day...
                             </TextTicker>
                         </View>
-
-                        {/* <View>
-                        <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20, marginTop: 20 }}>PUNCH IN OUT</Text>
-                    </View>
-                    <View style={{
-                        marginTop: 10, padding: 20, backgroundColor: 'white', borderRadius: 20, shadowColor: 'black',
-                        shadowOffset: { width: 2, height: 5 },
-                        shadowOpacity: 1,
-                        shadowRadius: 2,
-                        elevation: 5,
-                    }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                            <View style={{}}>
-                                <Text style={{}}>PUNCH IN</Text>
-                                <Text style={{ color: 'white', textAlign: 'center', fontWeight: 'bold', color: 'black' }}>{punchInTime}</Text>
-                            </View>
-                            <View style={{ marginLeft: 10 }}>
-                                <Text style={{}}>PUNCH OUT</Text>
-                                <Text style={{ color: 'white', textAlign: 'center', fontWeight: 'bold', color: 'black' }}>{punchOutTime}</Text>
-                            </View>
-                            <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', flex: 1 }}>
-                                {
-                                    punchInStatus == null ?
-                                        <TouchableOpacity onPress={() => PunchOut()}>
-                                            <View style={{
-                                                padding: 10, backgroundColor: Constant.darkturquoise,
-                                                borderRadius: 10,
-                                                shadowColor: 'black',
-                                                shadowOffset: { width: 0, height: 3 },
-                                                shadowOpacity: 1,
-                                                shadowRadius: 2,
-                                                elevation: 10, alignItems: 'center'
-                                            }}>
-                                                <MaterialCommunityIcons name='logout' size={40} />
-                                                <Text style={{ marginTop: 5, fontWeight: 'bold' }}>PUNCH OUT</Text>
-                                            </View>
-                                        </TouchableOpacity> :
-                                        <TouchableOpacity onPress={() => { getLiveLoc(), Opencamera() }}>
-                                            <View style={{
-                                                padding: 10, backgroundColor: Constant.darkturquoise,
-                                                borderRadius: 10,
-                                                shadowColor: 'black',
-                                                shadowOffset: { width: 0, height: 3 },
-                                                shadowOpacity: 1,
-                                                shadowRadius: 2,
-                                                elevation: 10, alignItems: 'center'
-                                            }}>
-                                                <MaterialCommunityIcons name='logout' size={40} />
-
-                                                <Text style={{ marginTop: 5, fontWeight: 'bold' }}>PUNCH IN</Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                }
-
-                            </View>
-                        </View>
-                        
-                      </View> */}
-                        {/* <- */}
                     </View>
                     <View style={{ marginTop: 30, }}>
                         <FlatList

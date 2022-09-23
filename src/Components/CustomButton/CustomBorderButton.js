@@ -11,7 +11,7 @@ export default function CustomBorderButton({
   isAddIcon,
 }) {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
       <View
         style={[
           styles.Button,
@@ -19,13 +19,18 @@ export default function CustomBorderButton({
             backgroundColor: isGrayBackground
               ? Constant.primaryGray
               : Constant.white,
+            shadowColor: 'black',
+            shadowOffset: { width: 2, height: 5 },
+            shadowOpacity: 1,
+            shadowRadius: 2,
+            elevation: 2,
           },
         ]}>
         <Text
           style={[
             styles.Buttontext,
             {
-              color: isBlack ? Constant.black : Constant.primaryGreen,
+              color: isBlack ? Constant.black : Constant.darkturquoise,
               // fontWeight: isGrayBackground && 'bold',
               fontSize: isAddIcon ? 25 : 16,
             },
@@ -41,7 +46,7 @@ const styles = StyleSheet.create({
   Button: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: '#47CA6C',
+    borderColor: Constant.darkturquoise,
     borderRadius: 10,
     borderWidth: 1,
     backgroundColor: 'white',

@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState, useRef } from 'react'
-import { View, Text, Alert, PermissionsAndroid, Platform, AppState } from "react-native"
+import { View, Text, Alert, PermissionsAndroid, Platform, AppState, StatusBar } from "react-native"
 import { NavigationContainer } from '@react-navigation/native';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { io } from 'socket.io-client';
@@ -152,14 +152,17 @@ const App = () => {
 
 
   return (
-    <CredentialsContext.Provider
-      value={{ storedCredentials, setStoredCredentials, storeData, setStoreData, group, setGroup }}>
-      <NavigationContainer ref={navigationRef}>
-        <RootSiblingParent>
-          <NavigationController />
-        </RootSiblingParent>
-      </NavigationContainer>
-    </CredentialsContext.Provider>
+    <>
+      <StatusBar barStyle='dark-content' backgroundColor={Constant.darkturquoise} />
+      <CredentialsContext.Provider
+        value={{ storedCredentials, setStoredCredentials, storeData, setStoreData, group, setGroup }}>
+        <NavigationContainer ref={navigationRef}>
+          <RootSiblingParent>
+            <NavigationController />
+          </RootSiblingParent>
+        </NavigationContainer>
+      </CredentialsContext.Provider>
+    </>
   )
 }
 

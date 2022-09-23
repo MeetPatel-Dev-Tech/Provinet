@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import { View, Text, SafeAreaView, ScrollView, TextInput, FlatList, Keyboard, KeyboardAvoidingView, TouchableOpacity, Platform, Image, SliderBase, Alert } from "react-native"
+import { View, Text, SafeAreaView, ScrollView, Animated, TextInput, FlatList, Keyboard, KeyboardAvoidingView, TouchableOpacity, Platform, Image, SliderBase, Alert } from "react-native"
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ProgressLoader from 'rn-progress-loader';
-import Animated, { FadeIn, FadeInLeft, Layout, RotateInDownLeft, Transition, ZoomIn, ZoomInDown, ZoomInRotate, ZoomOut } from "react-native-reanimated";
+// import Animated, { FadeIn, FadeInLeft, Layout, RotateInDownLeft, Transition, ZoomIn, ZoomInDown, ZoomInRotate, ZoomOut } from "react-native-reanimated";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import { io } from "socket.io-client";
@@ -44,8 +44,6 @@ export default function CreateGroup({ navigation }) {
             headerRight: () => (
                 <TouchableOpacity onPress={() => {
                     setSearch(false)
-                    //   setHeader(false),
-                    //   setStoreData(false)
                 }}>
                     <AntDesign name='search1' size={20} style={{ marginLeft: 5 }} color='white' />
                 </TouchableOpacity>
@@ -128,19 +126,29 @@ export default function CreateGroup({ navigation }) {
         )
     }
 
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
+    const fadeOut = () => {
+        // Will change fadeAnim value to 0 in 3 seconds
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 3000,
+            useNativeDriver: true
+        }).start();
+    };
+
+
     const renderSelectedUserList = ({ item, index }) => {
         return (
             <View style={{
-                marginVertical: 10, marginBottom: 20, flex: 1
+                justifyContent: 'center', paddingVertical: 10, alignItems: 'center', marginTop: 2
             }}
             // entering={ZoomIn}
             // exiting={FadeInLeft}
             // layout={Transition}
             >
-
-                {/* {item.selected == true && */}
                 <View
-                    style={{ marginRight: 10, marginLeft: 6, alignItems: 'center' }}>
+                    style={{ marginRight: 10, marginLeft: 6, alignItems: 'center', }}>
                     <TouchableOpacity onPress={() => { addUserDetail(item), addUserId(item.user), onPressHandler(item.user) }} style={{ alignItems: 'center' }}>
                         <Image source={item.profilepic == null ? require('../../../Assets/Image/EmptyProfile.jpg')
                             :
@@ -157,8 +165,10 @@ export default function CreateGroup({ navigation }) {
                         <Text style={{ textAlign: "center" }}>{item.firstName}</Text>
                     </View>
                 </View>
-                {/* } */}
+
+
             </View>
+
         )
     }
 
@@ -245,34 +255,8 @@ export default function CreateGroup({ navigation }) {
                 width={200}
                 color={'#000'}
             />
+            {/* <KeyboardAvoidingView style={{}}> */}
             <View style={{}}>
-                <FlatList
-                    data={selectedUserDetail} horizontal={true}
-                    // contentContainerStyle={{ flexGrow: 1 }}
-                    renderItem={renderSelectedUserList}
-                    keyExtractor={(item, index) => index.toString()}
-                    style={{
-                        marginTop: search == false ? 50 : 0,
-                        borderBottomWidth: search == true ? selectedUserDetail.length > 0 ? 1 : 0 : 0,
-                    }}
-                />
-                {search == true ?
-                    <FlatList
-                        data={userDetail}
-                        contentContainerStyle={{}}
-                        renderItem={renderUserList}
-                        keyExtractor={(item, index) => index.toString()}
-                        style={{ marginBottom: selectedUserDetail.length > 0 ? 90 : 0 }}
-                    />
-                    :
-                    <FlatList
-                        data={userSearch}
-                        contentContainerStyle={{}}
-                        renderItem={renderUserList}
-                        keyExtractor={(item, index) => index.toString()}
-                        style={{ marginBottom: selectedUserDetail.length > 0 ? 140 : 0 }}
-                    />
-                }
 
                 {search == false &&
                     <View
@@ -280,16 +264,16 @@ export default function CreateGroup({ navigation }) {
                         // exiting={FadeIn}
                         // layout={Layout}
                         style={{
-                            position: 'absolute', width: '100%', top: 0,
+                            // position: 'absolute', width: '100%', top: 0,
                             alignItems: "center",
                             flexDirection: 'row',
                             backgroundColor: "white",
-                            marginBottom: 5,
                             shadowColor: 'black',
                             shadowOffset: { width: 2, height: 5 },
                             shadowOpacity: 1,
                             shadowRadius: 2,
                             elevation: 5,
+                            height: 50
                         }}>
                         <View style={{ marginLeft: 20 }}>
                             <TouchableOpacity onPress={() => { setSearch(true) }}>
@@ -306,7 +290,7 @@ export default function CreateGroup({ navigation }) {
                                 //  theme={Constant.theme}
                                 //  activeOutlineColor={Constant.darkturquoise}
                                 style={{
-                                    height: 55,
+                                    // height: 55,
                                     //  margin: 12,
                                     //  borderWidth: 1,
                                     padding: 10,
@@ -315,7 +299,79 @@ export default function CreateGroup({ navigation }) {
                         </View>
                     </View>
                 }
+                <FlatList
+                    data={selectedUserDetail}
+                    horizontal={true}
+                    // contentContainerStyle={{ flexGrow: 1 }}
+                    renderItem={renderSelectedUserList}
+                    keyExtractor={(item, index) => index.toString()}
+                    style={{
+                        // marginTop: search == false ? 50 : 0,
+                        borderBottomWidth: selectedUserDetail.length > 0 ? 1 : 0,
+                    }}
+                />
+                {search == true ?
+                    <FlatList
+                        data={userDetail}
+                        contentContainerStyle={{}}
+                        renderItem={renderUserList}
+                        keyExtractor={(item, index) => index.toString()}
+                        style={{ marginBottom: selectedUserDetail.length > 0 ? 85 : 0, }}//
+                    />
+                    :
+                    <FlatList
+                        data={userSearch}
+                        //contentContainerStyle={{}}
+                        renderItem={renderUserList}
+                        keyExtractor={(item, index) => index.toString()}
+                        style={{ marginBottom: selectedUserDetail.length > 0 ? 135 : search == false ? 50 : 0, }}//
+                    />
+                }
+
+
+                {/* {search == false &&
+                        <View
+                            // entering={ZoomIn}
+                            // exiting={FadeIn}
+                            // layout={Layout}
+                            style={{
+                                position: 'absolute', width: '100%', top: 0,
+                                alignItems: "center",
+                                flexDirection: 'row',
+                                backgroundColor: "white",
+                                shadowColor: 'black',
+                                shadowOffset: { width: 2, height: 5 },
+                                shadowOpacity: 1,
+                                shadowRadius: 2,
+                                elevation: 5,
+                                height: 50
+                            }}>
+                            <View style={{ marginLeft: 20 }}>
+                                <TouchableOpacity onPress={() => { setSearch(true) }}>
+                                    <MaterialCommunityIcons name='keyboard-backspace' size={30} color='black' />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <TextInput
+                                    label="Search"
+                                    onChangeText={e => handleSearch(e)}
+                                    // keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
+                                    placeholder="Search..."
+                                    autoFocus={true}
+                                    //  theme={Constant.theme}
+                                    //  activeOutlineColor={Constant.darkturquoise}
+                                    style={{
+                                        // height: 55,
+                                        //  margin: 12,
+                                        //  borderWidth: 1,
+                                        padding: 10,
+                                    }}
+                                />
+                            </View>
+                        </View>
+                    } */}
             </View>
+            {/* </KeyboardAvoidingView> */}
 
             <TouchableOpacity onPress={() => onSubmitPress()}
                 style={{ position: "absolute", bottom: 30, right: 10, }}>

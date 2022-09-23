@@ -108,7 +108,7 @@ export default function LeaveDetail({ navigation }) {
             <View style={{
                 flex: 1,
                 backgroundColor: 'white',
-                paddingVertical: 15,
+                paddingVertical: 10,
                 paddingHorizontal: 4,
                 marginTop: 10, marginRight: 4, marginLeft: 4,
                 borderRadius: 10,
@@ -604,7 +604,7 @@ export default function LeaveDetail({ navigation }) {
                     {/* <View style={{ marginTop: 10, marginHorizontal: 20, justifyContent: 'flex-end', flex: 1, marginBottom: 20 }}>
                         <CustomButton text='applied for leave' onPress={() => navigation.navigate('ApplieLeave', { isEdit: false })} />
                     </View> */}
-                    <View style={{ position: "absolute", bottom: 20, right: 20, padding: 15, borderRadius: 40, backgroundColor: Constant.darkturquoise }}>
+                    <View style={{ position: "absolute", bottom: 20, right: 20, padding: 15, borderRadius: 30, backgroundColor: Constant.darkturquoise }}>
                         {/* <TouchableOpacity onPress={() => navigation.navigate('ApplieLeave', { isEdit: false })}> */}
                         <TouchableOpacity onPress={() => { setAppliedLeaveModalVisible(true), setIsEdit(false) }}>
                             <FontAwesome5 name='plus' size={20} color='white' />
@@ -653,6 +653,16 @@ export default function LeaveDetail({ navigation }) {
 
 
             <Modal isVisible={appliedLeaveModalVisible}
+                swipeDirection='down'
+                onSwipeComplete={() => {
+                    setAppliedLeaveModalVisible(false);
+                    setStartDate('');
+                    setLevaveReason('');
+                    setEndDate('');
+                    setLeavesType('');
+                    setLeaveStartDateHalfType('');
+                    setLeaveEndDateHalfType('');
+                }}
                 onBackdropPress={() => {
                     setAppliedLeaveModalVisible(false);
                     setStartDate('');

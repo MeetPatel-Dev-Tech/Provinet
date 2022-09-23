@@ -21,6 +21,13 @@ import Approvals from '../../../Screens/Approvals/Approvals';
 import { Tasks } from '../../../CommonFiles/SvgFile';
 import CreateGroup from '../../../Screens/Chat/CreateGroupScreen/CreateGroup';
 import GroupName from '../../../Screens/Chat/CreateGroupScreen/GroupName';
+import DailyReport from '../../../Screens/DailyReport/DailyReport';
+import LeaveApprovals from '../../../Screens/Approvals/LeaveApprovals/LeaveApprovals';
+import TimeSheet from '../../../Screens/Approvals/TimeSheet/TimeSheet';
+import ExpenseAndClaimsUser from '../../../Screens/Approvals/ExpenseAndClaimsUser/ExpenseAndClaimsUser';
+import ExpenseAndClaims from '../../../Screens/Approvals/ExpenseAndClaimsAdmin/ExpanseAndClaims';
+import ExpenseAndClaimsDetails from '../../../Screens/Approvals/ExpenseAndClaimsAdmin/ExpanseAndClaimsDetails';
+import AddAttechment from '../../../Screens/Approvals/ExpenseAndClaimsAdmin/AddAttechment';
 ;
 
 export default function AppStackNavigation({ navigation }) {
@@ -127,7 +134,63 @@ export default function AppStackNavigation({ navigation }) {
                 name="Approvals"
                 component={Approvals}
                 options={({ navigation }) => ({
-                    title: 'Approvals'
+                    title: 'Approvals',
+                    headerStyle: { backgroundColor: Constant.darkturquoise },
+                    headerTitleStyle: { color: 'white' }
+                })}
+            />
+            <Stack.Screen
+                name="LeaveApprovals"
+                component={LeaveApprovals}
+                options={({ navigation }) => ({
+                    title: 'LeaveApprovals',
+                    headerStyle: { backgroundColor: Constant.darkturquoise },
+                    headerTitleStyle: { color: 'white' }
+                })}
+            />
+            <Stack.Screen
+                name="TimeSheet"
+                component={TimeSheet}
+                options={({ navigation }) => ({
+                    title: 'Time Sheet',
+                    headerStyle: { backgroundColor: Constant.darkturquoise },
+                    headerTitleStyle: { color: 'white' }
+                })}
+            />
+            <Stack.Screen
+                name="ExpenseAndClaims"
+                component={ExpenseAndClaims}
+                options={({ navigation }) => ({
+                    title: 'Expense & Claims',
+                    headerStyle: { backgroundColor: Constant.darkturquoise },
+                    headerTitleStyle: { color: 'white' }
+                })}
+            />
+            <Stack.Screen
+                name="ExpenseAndClaimsUser"
+                component={ExpenseAndClaimsUser}
+                options={({ navigation }) => ({
+                    title: 'Expense & Claims',
+                    headerStyle: { backgroundColor: Constant.darkturquoise },
+                    headerTitleStyle: { color: 'white' }
+                })}
+            />
+            <Stack.Screen
+                name="ExpenseAndClaimsDetails"
+                component={ExpenseAndClaimsDetails}
+                options={({ navigation }) => ({
+                    title: 'Expense & Claims',
+                    headerStyle: { backgroundColor: Constant.darkturquoise },
+                    headerTitleStyle: { color: 'white' }
+                })}
+            />
+            <Stack.Screen
+                name="Attechment"
+                component={AddAttechment}
+                options={({ navigation }) => ({
+                    title: 'Attechment',
+                    headerStyle: { backgroundColor: Constant.darkturquoise },
+                    headerTitleStyle: { color: 'white' }
                 })}
             />
             <Stack.Screen
@@ -144,6 +207,15 @@ export default function AppStackNavigation({ navigation }) {
                 component={GroupName}
                 options={({ navigation }) => ({
                     title: 'New Group',
+                    headerStyle: { backgroundColor: Constant.darkturquoise },
+                    headerTitleStyle: { color: 'white' }
+                })}
+            />
+            <Stack.Screen
+                name="DailyReport"
+                component={DailyReport}
+                options={({ navigation }) => ({
+                    title: 'Attendance',
                     headerStyle: { backgroundColor: Constant.darkturquoise },
                     headerTitleStyle: { color: 'white' }
                 })}

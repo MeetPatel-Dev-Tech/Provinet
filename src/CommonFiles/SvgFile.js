@@ -37,6 +37,26 @@ import CallIcon from "../Assets/Icon/svg/Call.svg";
 import Cancel from "../Assets/Icon/svg/Cancel.svg";
 import Selected from "../Assets/Icon/svg/Selected.svg";
 import RoundIcon from "../Assets/Icon/svg/Round.svg";
+import ArrowIcon from "../Assets/Icon/svg/Arrow.svg";
+import EllipseGreen from "../Assets/Icon/svg/EllipseGreen.svg";
+import EllipseParpale from "../Assets/Icon/svg/EllipseParpale.svg";
+import EllipseYellow from "../Assets/Icon/svg/EllipseYellow.svg";
+import EllipseRed from "../Assets/Icon/svg/EllipseRed.svg";
+import Attendance2 from "../Assets/Icon/svg/Attendance2.svg";
+import Leave2 from "../Assets/Icon/svg/Leave2.svg";
+import Ruppesign from "../Assets/Icon/svg/Rupee.svg";
+import TimeSheet from "../Assets/Icon/svg/TimeSheet.svg";
+import Timer from "../Assets/Icon/svg/Timer.svg";
+import CrossIcon from "../Assets/Icon/svg/Cross.svg";
+import DownloadIcon from "../Assets/Icon/svg/Download.svg";
+import CalenderDate from "../Assets/Icon/svg/CalenderDate.svg";
+import Category2 from "../Assets/Icon/svg/Category2.svg";
+import Reciept from "../Assets/Icon/svg/Reciept.svg";
+import Rupee2 from "../Assets/Icon/svg/Rupee2.svg";
+import CancelIcon from "../Assets/Icon/svg/CancelIcon.svg";
+import Eye from "../Assets/Icon/svg/Eye.svg";
+import Filter from "../Assets/Icon/svg/Filter.svg";
+import Right from "../Assets/Icon/svg/Right.svg";
 
 export {
     Alerts,
@@ -63,5 +83,10 @@ export {
     Attendances, Chats, Clients, DailyReports, Holidays, Leaves, Newss, Salarys, Tasks,
     VideoCallIcon,
     CallIcon, DownIcon, UpIcon,
-    Cancel, Selected, RoundIcon
+    Cancel, Selected, RoundIcon,
+    ArrowIcon,
+    EllipseGreen, EllipseParpale, EllipseRed, EllipseYellow,
+    Attendance2, Leave2, TimeSheet, Ruppesign, Timer, CrossIcon, DownloadIcon,
+    CalenderDate, Category2, Reciept, Rupee2,
+    CancelIcon, Eye, Filter, Right
 }
