@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { View, Text, SafeAreaView, ScrollView, Dimensions, TextInput, FlatList, TouchableOpacity, Platform, Image, SliderBase, Alert } from "react-native";
 import Constant from '../../../../CommonFiles/Constant';
-import { CancelIcon, Eye, Right } from '../../../../CommonFiles/SvgFile';
+import Modal from 'react-native-modal';
+import { CancelIcon, CrossIcon, Eye, Filter, Filter2, Right } from '../../../../CommonFiles/SvgFile';
 
 export default function PendigLeave() {
 
+    const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
+    const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+    const [filters, setFilters] = useState(true);
 
     const data = [
         { id: 1, name: 'meet', status: 'pending', leaverType: 'Sick', date: "March 25 - March 27 2018" },
@@ -94,6 +98,67 @@ export default function PendigLeave() {
                     renderItem={renderpendingLeave}
                 />
             </View>
+            {filters == true &&
+                <View style={{
+                    position: 'absolute', bottom: 20, right: 20,
+                    padding: 15,
+                    borderRadius: 10,
+                    backgroundColor: Constant.darkturquoise,
+                    shadowColor: 'black',
+                    shadowOffset: { width: 2, height: 5 },
+                    shadowOpacity: 1,
+                    shadowRadius: 2,
+                    elevation: 3,
+                }}>
+                    <TouchableOpacity onPress={() => { setIsCancelModalVisible(true), setIsFilterModalVisible(true), setFilters(false) }} >
+                        <Filter height={20} width={20} />
+                    </TouchableOpacity>
+                </View>
+            }
+            <Modal isVisible={isFilterModalVisible} backdropColor='transparent'>
+                <View style={{ justifyContent: 'flex-end', flex: 1, alignItems: 'flex-end', marginRight: 12, marginBottom: 80 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ marginRight: 20 }}>
+                            <Text style={{ fontSize: 18 }}>Filter</Text>
+                        </View>
+                        <View style={{
+                            backgroundColor: 'white', padding: 12,
+                            borderRadius: 20,
+                            backgroundColor: Constant.darkturquoise,
+                            shadowColor: 'black',
+                            shadowOffset: { width: 2, height: 5 },
+                            shadowOpacity: 1,
+                            shadowRadius: 2,
+                            elevation: 3,
+                        }}>
+                            <Filter2 height={20} width={20} />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal isVisible={isCancelModalVisible}
+                backdropColor='transparent'
+                animationIn='bounce'
+            >
+                <View style={{
+                    justifyContent: 'flex-end', flex: 1,
+                    alignItems: 'flex-end', marginRight: 10, marginBottom: 0
+                }}>
+                    <TouchableOpacity onPress={() => { setFilters(true), setIsFilterModalVisible(false), setIsCancelModalVisible(false) }}
+                        style={{
+                            backgroundColor: 'white', padding: 15,
+                            borderRadius: 10,
+                            backgroundColor: Constant.darkturquoise,
+                            shadowColor: 'black',
+                            shadowOffset: { width: 2, height: 5 },
+                            shadowOpacity: 1,
+                            shadowRadius: 2,
+                            elevation: 3,
+                        }}>
+                        <CrossIcon height={20} width={20} />
+                    </TouchableOpacity>
+                </View>
+            </Modal>
         </SafeAreaView>
     )
 }

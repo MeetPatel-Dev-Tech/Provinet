@@ -17,6 +17,7 @@ export default function DailyReport({ navigation }) {
     const [count, setCount] = useState(0);
     const [show, setShow] = useState(false);
     const [ids, setIds] = useState('');
+    const [selectedIndex, setSelectedIndex] = useState();
 
 
     useEffect(() => {
@@ -256,7 +257,7 @@ export default function DailyReport({ navigation }) {
     }
 
 
-    const renderAllDayAttendanceReport = ({ item }) => {
+    const renderAllDayAttendanceReport = ({ item, index }) => {
         return (
             <View style={{
                 marginTop: 10,
@@ -314,7 +315,7 @@ export default function DailyReport({ navigation }) {
                     </View>
                     <View>
                         <TouchableOpacity style={{
-                            //transform: renderRotateIcon(item.id),
+                            transform: [{ rotate: selectedIndex == index ? '90deg' : '0deg' }],
                             backgroundColor: '#F3F3F3',
                             padding: 5,
                             borderRadius: 5,
@@ -329,6 +330,7 @@ export default function DailyReport({ navigation }) {
                             onPress={() => {
                                 setShow(!show);
                                 addUserId(item.id);
+                                setSelectedIndex(selectedIndex == index ? null : index)
                                 //    renderRotateIcon(item.id)
                                 // setId(item.id);
                                 // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeIn);
@@ -340,7 +342,7 @@ export default function DailyReport({ navigation }) {
                                 });
                             }}>
                             {/* <View style={{
-                                transform: [{ rotate: show == true ? '90deg' : '0deg' }],
+                                transform: [{ rotate: selectedId == index ? '90deg' : '0deg' }],
                                 backgroundColor: '#F3F3F3',
                                 padding: 5,
                                 borderRadius: 5,
@@ -355,7 +357,54 @@ export default function DailyReport({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                {randerDetailView(item.id)}
+                {/* {randerDetailView(item.id)} */}
+
+                {selectedIndex == index &&
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, marginLeft: 25 }}>
+                        <View style={{ alignItems: 'center' }}>
+                            <View style={{
+                                backgroundColor: '#816DF0',
+                                padding: 5,
+                                borderRadius: 15,
+                                shadowColor: 'black',
+                                shadowOffset: { width: 2, height: 5 },
+                                shadowOpacity: 1,
+                                shadowRadius: 2,
+                                elevation: 3,
+                            }}>
+                                <Timer height={15} width={15} />
+                            </View>
+                            <View style={{ flex: 1, borderLeftWidth: 1, paddingVertical: 10, borderColor: 'gray', alignItems: 'center', justifyContent: 'center' }}>
+
+                            </View>
+                            <View style={{
+                                backgroundColor: '#816DF0',
+                                padding: 5,
+                                borderRadius: 15,
+                                shadowColor: 'black',
+                                shadowOffset: { width: 2, height: 5 },
+                                shadowOpacity: 1,
+                                shadowRadius: 2,
+                                elevation: 3,
+                            }}>
+                                <Timer height={15} width={15} />
+                            </View>
+                        </View>
+                        <View style={{ marginLeft: 10, justifyContent: 'center', flex: 1 }}>
+                            <View>
+                                <Text>
+                                    Punch In at
+                                </Text>
+                            </View>
+                            <View style={{ flex: 1, paddingVertical: 10, }}>
+                                <Text>10:50PM</Text>
+                            </View>
+                            <View style={{}}>
+                                <Text>Punch out at</Text>
+                            </View>
+                        </View>
+                    </View>
+                }
             </View >
         )
     }
@@ -460,6 +509,7 @@ export default function DailyReport({ navigation }) {
                         <FlatList showsVerticalScrollIndicator={false}
                             data={dailyAttendance}
                             renderItem={renderAllDayAttendanceReport}
+                            keyExtractor={(item, index) => index.toString()}
                         />
                         {/* <AccordionList
                             list={dailyAttendance}

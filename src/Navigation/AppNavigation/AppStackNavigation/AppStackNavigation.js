@@ -28,6 +28,7 @@ import ExpenseAndClaimsUser from '../../../Screens/Approvals/ExpenseAndClaimsUse
 import ExpenseAndClaims from '../../../Screens/Approvals/ExpenseAndClaimsAdmin/ExpanseAndClaims';
 import ExpenseAndClaimsDetails from '../../../Screens/Approvals/ExpenseAndClaimsAdmin/ExpanseAndClaimsDetails';
 import AddAttechment from '../../../Screens/Approvals/ExpenseAndClaimsAdmin/AddAttechment';
+import AddTimeZone from '../../../Screens/Approvals/TimeSheet/AddTimeZone';
 ;
 
 export default function AppStackNavigation({ navigation }) {
@@ -151,6 +152,15 @@ export default function AppStackNavigation({ navigation }) {
             <Stack.Screen
                 name="TimeSheet"
                 component={TimeSheet}
+                options={({ navigation }) => ({
+                    title: 'Time Sheet',
+                    headerStyle: { backgroundColor: Constant.darkturquoise },
+                    headerTitleStyle: { color: 'white' }
+                })}
+            />
+            <Stack.Screen
+                name="AddTimeZone"
+                component={AddTimeZone}
                 options={({ navigation }) => ({
                     title: 'Time Sheet',
                     headerStyle: { backgroundColor: Constant.darkturquoise },

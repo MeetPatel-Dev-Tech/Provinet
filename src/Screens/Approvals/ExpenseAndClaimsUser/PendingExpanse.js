@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { View, Text, SafeAreaView, ScrollView, Dimensions, TextInput, FlatList, TouchableOpacity, Platform, Image, SliderBase, Alert } from "react-native";
-import { CancelIcon, Eye, Right } from '../../../CommonFiles/SvgFile';
+import Constant from '../../../CommonFiles/Constant';
+import { CancelIcon, Eye, Plus, Right } from '../../../CommonFiles/SvgFile';
 
 export default function PendingExpanse({ navigation }) {
 
@@ -97,6 +98,20 @@ export default function PendingExpanse({ navigation }) {
                     data={data}
                     renderItem={renderpendingLeave}
                 />
+            </View>
+            <View style={{
+                position: 'absolute', bottom: 20, right: 20, padding: 15,
+                borderRadius: 40,
+                backgroundColor: Constant.darkturquoise,
+                shadowColor: 'black',
+                shadowOffset: { width: 2, height: 5 },
+                shadowOpacity: 1,
+                shadowRadius: 2,
+                elevation: 3,
+            }}>
+                <TouchableOpacity onPress={() => navigation.navigate('Attechment')}>
+                    <Plus height={20} width={20} />
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     )
