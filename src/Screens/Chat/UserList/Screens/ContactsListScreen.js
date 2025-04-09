@@ -5,6 +5,7 @@ import ProgressLoader from 'rn-progress-loader';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { io } from "socket.io-client";
 import { useScrollToTop } from '@react-navigation/native';
+import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import { GetApi, PostApi } from '../../../../Api/Api';
 import CommonStyle from '../../../../CommonFiles/CommonStyle';
 import Constant from '../../../../CommonFiles/Constant';
@@ -32,16 +33,26 @@ export default function ContactsListScreen({ navigation }) {
         reconnectionDelayMax: 1000,
     });
 
-    useEffect(() => {
-        getAllUserDetails();
-    }, []);
+    // useEffect(() => {
+
+    // }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            getAllUserDetails();
+        }, [])
+    )
+
 
 
     const getAllUserDetails = async () => {
-        const Responsedata = await GetApi(Constant.socketIdURL + CommonUtilsObj.EmployeDetails[0].user)
-        //  console.log('Responsedataaaaaaaa', Responsedata.data)
-        setUserDetail(Responsedata.data)
-        setUserSearch(Responsedata.data)
+        const Responsedata = await GetApi(Constant.GetEployeList)
+        console.log('resp______', Responsedata)
+        console.log('resp______', Responsedata.status)
+        if (Responsedata.status == 200) {
+            setUserDetail(Responsedata.data)
+            setUserSearch(Responsedata.data)
+        }
     }
 
     const onPress = (item) => {
@@ -52,35 +63,39 @@ export default function ContactsListScreen({ navigation }) {
             socketId: item.socketid,
             userFirstName: item.firstName,
             userLastName: item.lastName,
-            userId: item.user,
+            userId: item.id,
             profilePic: item.profilepic
         })
         // }
     }
     const renderUserList = ({ item }) => {
         return (
-            <View style={{ marginHorizontal: 10, marginBottom: 10, marginTop: 5 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View>
-                        <Image source={item.profilepic == null ? require('../../../../Assets/Image/EmptyProfile.jpg')
-                            :
-                            { uri: Constant.getProfilePicURL + item.profilepic }}
-                            style={{ width: 45, height: 45, borderRadius: 40, marginLeft: 5 }}
-                        />
-                        {item.online == 'Y' &&
-                            <View style={{ position: 'absolute', bottom: -5, right: -5 }}>
-                                <Octicons name='dot-fill' size={25} color='green' />
-                            </View>
-                        }
+            <View style={{ marginLeft: 10, }}>
+                {item.firstName != null && item.lastName != null &&
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View>
+                            <Image source={item.profilepic == null ? require('../../../../Assets/Image/EmptyProfile.jpg')
+                                :
+                                { uri: Constant.getProfilePicURL + item.profilepic }}
+                                style={{ width: 45, height: 45, borderRadius: 40, }}
+                            />
+                            {item.online == 'Y' &&
+                                <View style={{ position: 'absolute', bottom: -5, right: -5 }}>
+                                    <Octicons name='dot-fill' size={25} color='green' />
+                                </View>
+                            }
+                        </View>
+                        <View style={{ flexDirection: 'row', paddingVertical: 15, flex: 1, alignItems: 'center', marginLeft: 10, borderBottomWidth: 0.2, borderColor: 'gray' }}>
+                            <TouchableOpacity style={{}}
+                                onPress={() => { onPress(item) }}
+                            >
+                                <Text style={{ fontSize: 20, }}>{item.firstName} {item.lastName}</Text>
+                                {/* <Text style={{}}>message</Text> */}
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <TouchableOpacity style={{ marginLeft: 25 }}
-                        onPress={() => { onPress(item) }}
-                    >
-                        <Text style={{ fontSize: 20, }}>{item.firstName} {item.lastName}</Text>
-                        <Text style={{}}>message</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+                }
+            </View >
         )
     }
 

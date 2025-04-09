@@ -57,8 +57,6 @@ import CancelIcon from "../Assets/Icon/svg/CancelIcon.svg";
 import Eye from "../Assets/Icon/svg/Eye.svg";
 import Filter from "../Assets/Icon/svg/Filter.svg";
 import Right from "../Assets/Icon/svg/Right.svg";
-import Filter2 from "../Assets/Icon/svg/Filter2.svg";
-import Plus from "../Assets/Icon/svg/Plus.svg";
 
 export {
     Alerts,
@@ -90,6 +88,5 @@ export {
     EllipseGreen, EllipseParpale, EllipseRed, EllipseYellow,
     Attendance2, Leave2, TimeSheet, Ruppesign, Timer, CrossIcon, DownloadIcon,
     CalenderDate, Category2, Reciept, Rupee2,
-    CancelIcon, Eye, Filter, Right,
-    Filter2, Plus
+    CancelIcon, Eye, Filter, Right
 }

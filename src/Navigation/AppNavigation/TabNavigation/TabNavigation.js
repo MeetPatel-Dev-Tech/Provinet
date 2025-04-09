@@ -50,18 +50,6 @@ function TabNavigation() {
         }}
             initialRouteName="HomeScreen"
         >
-            <Tab.Screen name='Setting' component={SettingScreen}
-                options={{
-                    tabBarIcon: ({ focused }) => {
-                        return (
-                            // <Image source={require('../../../Assets/Icon/Category.png')}
-                            //     style={{ height: 30, width: 30 }}
-                            // />
-                            <Catagory height={30} width={30} />
-                        )
-                    },
-                    headerShown: false,
-                }} ></Tab.Screen>
             <Tab.Screen name='HomeScreen' component={HomeScreen}
                 options={{
                     tabBarIcon: ({ focused }) => {
@@ -86,6 +74,19 @@ function TabNavigation() {
                     headerShown: false
 
                 }} ></Tab.Screen>
+            <Tab.Screen name='Setting' component={SettingScreen}
+                options={{
+                    tabBarIcon: ({ focused }) => {
+                        return (
+                            // <Image source={require('../../../Assets/Icon/Category.png')}
+                            //     style={{ height: 30, width: 30 }}
+                            // />
+                            <Catagory height={30} width={30} />
+                        )
+                    },
+                    headerShown: false,
+                }} ></Tab.Screen>
+
             <Tab.Screen name='About' component={AboutScreen}
                 options={{
                     tabBarIcon: ({ focused }) => {

@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Image, SliderBase, Alert } from "react-native"
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import {
+    View,
+    Text,
+    SafeAreaView,
+    FlatList,
+    TouchableOpacity,
+    Image,
+    SliderBase,
+    Alert
+} from "react-native"
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import TextTicker from 'react-native-text-ticker'
 import ProgressLoader from 'rn-progress-loader';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import CommonStyle from '../../CommonFiles/CommonStyle'
 import Constant from '../../CommonFiles/Constant';
 import { CommonUtilsObj, getLiveLocation } from '../../Utils/CommonUtils';
 import moment from 'moment';
 import * as RootNavigation from '../../Navigation/RootNavigation';
 import { GetApi, PostApi, PostApiImage } from '../../Api/Api';
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics'
+import RNExitApp from 'react-native-exit-app';
 
 import { useNavigation } from '@react-navigation/native';
 import { ErrorToast, SuccessToast } from '../ToastMessage/Toast';
 import Logo from "../../Assets/Image/ms.svg";
 import { SvgUri } from 'react-native-svg';
-import { Alerts, Attendance, Attendances, Chat, Chats, Client, Clients, DailyReport, DailyReports, Holiday, Holidays, Leave, Leaves, News, Newss, Salary, Salarys, Task, Tasks } from '../../CommonFiles/SvgFile';
+import { Alerts, Attendance, BackHandler, Attendances, Chat, Chats, Client, Clients, DailyReport, DailyReports, Holiday, Holidays, Leave, Leaves, News, Newss, Salary, Salarys, Task, Tasks } from '../../CommonFiles/SvgFile';
 
 export default function HomeScreen({ }) {
     const navigation = useNavigation();
     const [punchInResponse, setPunchInResponse] = useState('');
     const [currentLatitude, setCurrentLatitude] = useState('');
-    const [currentLongiTude, setCurrentLongitude] = useState('');
+    const [currentLongitude, setCurrentLongitude] = useState('');
     const [punchInStatus, setPunchInStatus] = useState('');
     const [punchInTime, setPunchInTime] = useState('');
     const [punchOutTime, setPunchOutTime] = useState('');
@@ -30,33 +38,52 @@ export default function HomeScreen({ }) {
     const [lastPunchInTime, setLastPunchInTime] = useState('');
     const [lastPunchOutTime, setLastPunchOutTime] = useState('');
     const [loading, setLoading] = useState(false);
+    const [finger, setFinger] = useState(false);
 
-    const data = [
-        { name: 'Attendance', id: 1, image: <Attendances height={75} width={75} /> },// require('../../Assets/Icon/Attendance.png')
-        { name: 'Daily Report', id: 2, image: <DailyReports height={75} width={75} /> },
-        { name: 'Leave', id: 3, image: <Leaves height={75} width={75} /> },
-        { name: 'Chat', id: 4, image: <Chats height={75} width={75} /> },
-        { name: 'News', id: 5, image: <Newss height={75} width={75} /> },
-        { name: 'Holiday', id: 6, image: <Holidays height={75} width={75} /> },
-        { name: 'Task', id: 7, image: <Tasks height={75} width={75} /> },
-        { name: 'Client', id: 8, image: <Clients height={75} width={75} /> },
-        { name: 'Salary', id: 9, image: <Salarys height={75} width={75} /> },
-        { name: 'Approvals', id: 10, image: <Salarys height={75} width={75} /> },
-        { name: 'Expense & Claims', id: 10, image: <Salarys height={75} width={75} /> },
-        {},
-    ]
+    const employee =
+        [
+            { name: 'Attendance', id: 1, image: <Attendances height={75} width={75} /> },// require('../../Assets/Icon/Attendance.png')
+            { name: 'Daily Report', id: 2, image: <DailyReports height={75} width={75} /> },
+            { name: 'Leave', id: 3, image: <Leaves height={75} width={75} /> },
+            { name: 'Chat', id: 4, image: <Chats height={75} width={75} /> },
+            { name: 'News', id: 5, image: <Newss height={75} width={75} /> },
+            { name: 'Holiday', id: 6, image: <Holidays height={75} width={75} /> },
+            { name: 'Task', id: 7, image: <Tasks height={75} width={75} /> },
+            { name: 'Client', id: 8, image: <Clients height={75} width={75} /> },
+            { name: 'Salary', id: 9, image: <Salarys height={75} width={75} /> },
+            { name: 'Approvals', id: 10, image: <Salarys height={75} width={75} /> },
+            { name: 'Expense & Claims', id: 10, image: <Salarys height={75} width={75} /> },
+            {},
+        ]
+    const client =
+        [
+            { name: 'Attendance', id: 1, image: <Attendances height={75} width={75} /> },// require('../../Assets/Icon/Attendance.png')
+            { name: 'Daily Report', id: 2, image: <DailyReports height={75} width={75} /> },
+            { name: 'Leave', id: 3, image: <Leaves height={75} width={75} /> },
+            { name: 'Chat', id: 4, image: <Chats height={75} width={75} /> }
+        ]
 
     useEffect(() => {
-        //    getEmployePunchInOutDetails();
-        getLiveLoc();
+        getEmployePunchInOutDetails();
         console.log('mmmm', moment().format('HH:mm'))
+        sequeritylock();
         const unsubscribe = navigation.addListener('focus', () => {
-            getEmployePunchInOutDetails();
+            //    getEmployePunchInOutDetails();
             //  console.log('lastPunchInTime', lastPunchInTime, moment(lastPunchInTime, 'hh:mm').fromNow())
 
         });
         return unsubscribe;
     }, []);
+
+    const sequeritylock = () => {
+        if (CommonUtilsObj.EmployeDetails[0].userType == 2) {
+            fingerOption();
+        } else if (CommonUtilsObj.EmployeDetails[0].userType == 1) {
+            setFinger(true);
+        } else {
+            setFinger(true);
+        }
+    }
 
     const renderNameList = ({ item }) => {
         return (
@@ -85,23 +112,24 @@ export default function HomeScreen({ }) {
         )
     }
 
-    const PunchInOutCall = () => {
+    const PunchInOutCall = async () => {
+        //  await getLiveLoc();
         if (punchInStatus == null) {
-            PunchOut();
+            PunchIn();
         } else {
-            getLiveLoc();
             Opencamera();
         }
+
     }
 
     const OnPressEvent = (item) => {
         console.log('<<<<<<', item)
         if (item.name == 'Attendance') {
-            return RootNavigation.navigate('Attendance')
+            // return RootNavigation.navigate('Attendance')
         } else if (item.name == 'Task') {
-            return navigation.navigate('Task')
+            // return navigation.navigate('Task')
         } else if (item.name == 'Leave') {
-            return navigation.navigate('LeaveDetail')
+            // return navigation.navigate('LeaveDetail')
         } else if (item.name == 'News') {
             return navigation.navigate('News')
         } else if (item.name == 'Holiday') {
@@ -109,11 +137,11 @@ export default function HomeScreen({ }) {
         } else if (item.name == 'Chat') {
             return navigation.navigate('UserList')
         } else if (item.name == 'Approvals') {
-            return navigation.navigate('Approvals')
+            // return navigation.navigate('Approvals')
         } else if (item.name == 'Daily Report') {
             return navigation.navigate('DailyReport')
         } else if (item.name == 'Expense & Claims') {
-            return navigation.navigate('ExpenseAndClaims')
+            // return navigation.navigate('ExpenseAndClaims')
         }
     }
 
@@ -121,9 +149,9 @@ export default function HomeScreen({ }) {
         //   setLoading(true);
         const { latitude, longitude, heading } = await getLiveLocation();
         console.log('Live Loc-----', latitude, longitude);
-        getAddress(latitude, longitude);
         setCurrentLatitude(latitude);
         setCurrentLongitude(longitude);
+        getAddress(latitude, longitude);
     }
 
     const getAddress = async (latitude, longitude) => {
@@ -159,14 +187,13 @@ export default function HomeScreen({ }) {
                 // if (response.assets[0].fileSize < 3145728) {
                 console.log('..................')
                 setPunchInResponse({ uri: response.assets[0].uri });
-                PunchIn(response.assets[0].uri);
+                UploadImage(response.assets[0].uri);
                 // } else {
                 // ErrorToast(Message.KImageSize);
                 // }
             }
         });
     };
-    console.log('name', CommonUtilsObj.EmployeDetails[0].user)
     // if (punchInResponse != '') {
     //     PunchIn();
     // }
@@ -193,9 +220,7 @@ export default function HomeScreen({ }) {
     // }
     console.log('punchInStatus', punchInStatus)
 
-    const PunchIn = async (image) => {
-        console.log('..........................');
-        console.log('mmmm', moment().format('HH:mm'));
+    const UploadImage = async (image) => {
         setLoading(true);
         var data = new FormData();
         data.append('image', {
@@ -203,36 +228,50 @@ export default function HomeScreen({ }) {
             type: 'image/jpeg',
             name: 'profile.jpg',
         });
-        data.append('userid',
-            CommonUtilsObj.EmployeDetails[0].user
-        );
-        data.append('latitude',
-            currentLatitude
-        );
-        data.append('longitude',
-            currentLongiTude
-        );
-        data.append('intime',
-            String(moment().format('HH:mm'))
-        );
-        data.append('address',
-            punchInAddress
-        )
-        // const DATA = {
-        //     userid: CommonUtilsObj.EmployeDetails[0].user,
-        //     //    image: punchInResponse.uri,
-        //     image: data,
-        //     latitude: currentLatitude,
-        //     longitude: currentLongiTude,
-        //     intime: String(moment().format('hh:mm'))
-        // }
-        const ResponseData = await PostApiImage(Constant.PunchInURL, data, false)
+        // data.append('image',
+        //     image,
+        //     'profile.jpg',
+        // );
+        let responseData = await PostApiImage(Constant.KuploadImageURL, data);
+        console.log('response..', responseData)
+        if (responseData.status == 200) {
+            PunchIn(responseData.data.image)
+        } else {
+            setLoading(false)
+            ErrorToast(responseData.message)
+        }
+    }
+
+    const PunchIn = async (image) => {
+        console.log('............', currentLatitude, currentLongitude, punchInAddress);
+        setLoading(true);
+        const { latitude, longitude, heading } = await getLiveLocation();
+        console.log('Live Loc-----2', latitude, longitude);
+        const data = {
+            latitude: String(latitude),
+            longitude: String(longitude),
+            //  img: image,
+            // address: punchInAddress
+        }
+        let Data = '';
+        if (punchInStatus == null) {
+            Data = {
+                ...data
+            }
+        } else {
+            Data = {
+                ...data,
+                img: image
+            }
+        }
+
+        const ResponseData = await PostApi(Constant.KpunchInURL, Data, false)
         console.log('dddddddddd', ResponseData)
-        if (ResponseData.status == 'success') {
-            BreakTime();
+        if (ResponseData.status == 200) {
+            // BreakTime();
             setLoading(false);
-            setPunchInStatus(ResponseData.status)
-            SuccessToast('Successfully PunchIn')
+            //  setPunchInStatus(ResponseData.status)
+            SuccessToast(ResponseData.message)
             getEmployePunchInOutDetails();
         } else {
             ErrorToast(ResponseData.message);
@@ -269,18 +308,26 @@ export default function HomeScreen({ }) {
     }
 
     const getEmployePunchInOutDetails = async () => {
-        const ResponseData = await GetApi(Constant.PunchInOutDetailsURL + CommonUtilsObj.EmployeDetails[0].user)
-        // console.log('GetEmployeDetails..........', ResponseData.data[ResponseData.data.length - 1])
-        console.log('12 hour...............', (moment(ResponseData.data[ResponseData.data.length - 1].intime, 'hh:mm').format('hh:mm')))
-        console.log('hour...............', (moment(ResponseData.data[ResponseData.data.length - 1].outtime, 'hh:mm').format('hh:mm')))
-        setPunchInStatus(ResponseData.data[ResponseData.data.length - 1].outtime)
-        //  setPunchInTime(moment(ResponseData.data[ResponseData.data.length - 1].intime, 'hh:mm a').format('hh:mm a'))
-        setLastPunchInTime(moment(ResponseData.data[ResponseData.data.length - 1].intime, 'HH:mm').format('HH:mm'))
-        //   setLastPunchOutTime(moment(ResponseData.data[ResponseData.data.length - 1].outtime, 'HH:mm').format('HH:mm'))
-        //  setPunchOutTime(ResponseData.data[ResponseData.data.length - 1].outtime == null ? null : moment(ResponseData.data[ResponseData.data.length - 1].outtime, 'hh:mm').format('hh:mm a'))
-        // setTimeout(() => {
-        //     console.log('fffffff', lastPunchInTime, moment(lastPunchInTime, 'hh:mm').fromNow())
-        // }, 1000);
+
+        if (CommonUtilsObj.EmployeDetails[0].userType == 2) {
+
+            const ResponseData = await GetApi(Constant.KtodayPunchinoutURL)
+            // console.log('GetEmployeDetails..........', ResponseData.data[ResponseData.data.length - 1])
+            console.log('12 hour...............', ResponseData)
+            // console.log('12 hour...............', ResponseData.data[0].outtime)
+            if (ResponseData.data[0].outtime == undefined) {
+                setPunchInStatus(null)
+            } else {
+                setPunchInStatus(ResponseData.data[0].outtime)
+            }
+            //  setPunchInTime(moment(ResponseData.data[ResponseData.data.length - 1].intime, 'hh:mm a').format('hh:mm a'))
+            //.    setLastPunchInTime(moment(ResponseData.data[ResponseData.data.length - 1].intime, 'HH:mm').format('HH:mm'))
+            //   setLastPunchOutTime(moment(ResponseData.data[ResponseData.data.length - 1].outtime, 'HH:mm').format('HH:mm'))
+            //  setPunchOutTime(ResponseData.data[ResponseData.data.length - 1].outtime == null ? null : moment(ResponseData.data[ResponseData.data.length - 1].outtime, 'hh:mm').format('hh:mm a'))
+            // setTimeout(() => {
+            //     console.log('fffffff', lastPunchInTime, moment(lastPunchInTime, 'hh:mm').fromNow())
+            // }, 1000);
+        }
     }
 
     const RenderItemList = ({ item }) => {
@@ -336,6 +383,62 @@ export default function HomeScreen({ }) {
     }
 
 
+    const fingerOption = () => {
+        const rnBiometrics = new ReactNativeBiometrics()
+
+        rnBiometrics.isSensorAvailable()
+            .then((resultObject) => {
+                const { available, biometryType } = resultObject
+
+                if (available && biometryType === BiometryTypes.TouchID) {
+                    console.log('TouchID is supported')
+                } else if (available && biometryType === BiometryTypes.FaceID) {
+                    console.log('FaceID is supported')
+                } else if (available && biometryType === BiometryTypes.Biometrics) {
+                    console.log('Biometrics is supported')
+                    forandroid()
+                } else {
+                    console.log('Biometrics not supported')
+                    setFinger(true);
+                }
+            })
+
+        const forandroid = () => {
+            rnBiometrics.simplePrompt({ promptMessage: 'Confirm fingerprint', cancelButtonText: 'cancel' })
+                .then((resultObject) => {
+                    const { success } = resultObject
+
+                    if (success) {
+                        console.log('successful biometrics provided')
+                        setFinger(true);
+                    } else {
+                        console.log('user cancelled biometric prompt')
+                        setFinger(false);
+                        RNExitApp.exitApp();
+                    }
+                })
+                .catch(() => {
+                    console.log('biometrics failed')
+                    setFinger(false);
+                    RNExitApp.exitApp();
+                })
+        }
+    }
+
+
+    const renderdata = () => {
+        if (CommonUtilsObj.EmployeDetails[0].userType == 2) {
+            return employee
+        } else if (CommonUtilsObj.EmployeDetails[0].userType == 1) {
+            return client
+        } else {
+            return null
+        }
+    }
+
+
+
+
     //   console.log('punchInResponse.length', punchInResponse.uri.length)
     return (
         <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
@@ -349,8 +452,9 @@ export default function HomeScreen({ }) {
                 width={200}
                 color={'#000'}
             />
+
             {/* <Text style={CommonStyle.TextColor}>hi</Text> */}
-            {!loading &&
+            {!loading && finger == true &&
                 <View style={{ flex: 1 }}>
                     <View style={{ marginHorizontal: 20 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
@@ -358,31 +462,34 @@ export default function HomeScreen({ }) {
                                 <Image source={require('../../Assets/Image/Profile.jpg')} style={{ height: 40, width: 40 }} />
                             </TouchableOpacity>
                             <View>
-                                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{CommonUtilsObj.EmployeDetails[0].firstName}</Text>
-                                <Text style={{ fontSize: 16, }}>{CommonUtilsObj.EmployeDetails[0].Department}</Text>
+                                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                                    {CommonUtilsObj.EmployeDetails[0].firstName} {CommonUtilsObj.EmployeDetails[0].lastName}
+                                </Text>
                             </View>
-                            <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', flex: 1, }}>
-                                <TouchableOpacity onPress={() => PunchInOutCall()}>
-                                    <View style={{
-                                        padding: 10, borderRadius: 10, backgroundColor: 'white', shadowColor: 'black',
-                                        shadowOffset: { width: 2, height: 5 },
-                                        shadowOpacity: 1,
-                                        shadowRadius: 2,
-                                        elevation: 5,
-                                    }}>
-                                        {punchInStatus == null ?
-                                            <Image source={require('../../Assets/Icon/PuchOut.png')}
-                                                style={{ height: 30, width: 30, tintColor: 'red' }}
-                                            />
-                                            :
-                                            <Image source={require('../../Assets/Icon/PunchIn.png')}
-                                                style={{ height: 30, width: 30, tintColor: 'green' }}
-                                            />
-                                        }
+                            {CommonUtilsObj.EmployeDetails[0].userType == 2 &&
+                                <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', flex: 1, }}>
+                                    <TouchableOpacity onPress={() => PunchInOutCall()}>
+                                        <View style={{
+                                            padding: 10, borderRadius: 10, backgroundColor: 'white', shadowColor: 'black',
+                                            shadowOffset: { width: 2, height: 5 },
+                                            shadowOpacity: 1,
+                                            shadowRadius: 2,
+                                            elevation: 5,
+                                        }}>
+                                            {punchInStatus == null ?
+                                                <Image source={require('../../Assets/Icon/PuchOut.png')}
+                                                    style={{ height: 30, width: 30, tintColor: 'red' }}
+                                                />
+                                                :
+                                                <Image source={require('../../Assets/Icon/PunchIn.png')}
+                                                    style={{ height: 30, width: 30, tintColor: 'green' }}
+                                                />
+                                            }
 
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            }
                         </View>
                         <View style={{
                             marginTop: 25, paddingVertical: 10, borderRadius: 10, backgroundColor: 'white', shadowColor: 'black',
@@ -408,7 +515,7 @@ export default function HomeScreen({ }) {
                     <View style={{ marginTop: 30, }}>
                         <FlatList
                             numColumns={4}
-                            data={data}
+                            data={renderdata()}
                             renderItem={RenderItemList}
                         />
                     </View>

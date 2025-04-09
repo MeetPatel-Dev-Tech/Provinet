@@ -23,13 +23,14 @@ export default function ChatListScreen({ navigation, route }) {
     const [userSearch, setuserSearch] = useState('');
     const { storeData, setStoreData } = useContext(CredentialsContext);
     const { group, setGroup } = useContext(CredentialsContext);
+    const [groupDetails, setGroupDetails] = useState('');
     const isFocused = useIsFocused();
 
     let interval = useRef(null)
     let interval2 = useRef(null)
 
     let socket = io(Constant.socketLocationURL, {
-        query: { id: CommonUtilsObj.EmployeDetails[0].user },
+        query: { id: CommonUtilsObj.EmployeDetails[0].id },
         reconnectionDelayMax: 1000,
     });
 
@@ -44,21 +45,42 @@ export default function ChatListScreen({ navigation, route }) {
 
     useFocusEffect(
         React.useCallback(() => {
+            console.log('CommonUtilsObj.EmployeDetails[0].id', CommonUtilsObj.EmployeDetails[0].id)
             // interval.current = setInterval(() => {
-            const unsubscribe = socket.emit('getuserlist', CommonUtilsObj.EmployeDetails[0].user)
-
+            const unsubscribe = socket.emit('getuserlist', CommonUtilsObj.EmployeDetails[0].id)
+            getGroupList()
             // }, 3000)
             //   isFocused == false && clearInterval(interval.current);
-            return () => unsubscribe;
+            return () => unsubscribe
         }, [])
     )
 
     socket.on('getList', async response => {
-        console.log('response....', response)
+        console.log('response....', response.result)
         //   setcount(ex.result[0])
         setUserChatList(response.result)
         setuserSearch(response.result)
     })
+    socket.on('groupgetList', async response => {
+        console.log('groupgetList....', response.result)
+        console.log('groupgetList', response.result[0].fromuserid)
+        //   setcount(ex.result[0])
+        // setUserChatList(response.result)
+        // setuserSearch(response.result)
+    })
+
+    const getGroupList = async () => {
+        console.log('123')
+        const responseData = await GetApi(Constant.KRoomList)
+
+        console.log('resp<><><><>', responseData)
+        console.log('resp<1><2><><>', responseData.status)
+        console.log('resp<1><2><><>', groupDetails.length)
+
+        if (responseData.status == 200) {
+            setGroupDetails(responseData.data)
+        }
+    }
 
 
 
@@ -67,15 +89,56 @@ export default function ChatListScreen({ navigation, route }) {
         clearInterval(interval.current)
         setStoreData(true);
         onEventPress(item);
-        navigation.navigate('Chat', {
-            //  socketId: item.socketid,
-            userFirstName: item.firstName,
-            userLastName: item.lastName,
-            userId: item.user,
-            profilePic: item.profilepic,
-            status: item.online
-        })
+        console.log('hhgg', item.fromuserid.firstName)
+        console.log('hhgg', item.touserid.firstName)
+        if (item.touserid.id == CommonUtilsObj.EmployeDetails[0].id) {
+            navigation.navigate('Chat', {
+                //  socketId: item.socketid,
+                userFirstName: item.fromuserid.firstName,
+                userLastName: item.fromuserid.lastName,
+                userId: item.fromuserid.id,
+                profilePic: item.fromuserid.profilepic,
+                //   status: item.fromuserid.online
+            })
+        } else {
+            navigation.navigate('Chat', {
+                //  socketId: item.socketid,
+                userFirstName: item.touserid.firstName,
+                userLastName: item.touserid.lastName,
+                userId: item.touserid.id,
+                profilePic: item.touserid.profilepic,
+                //   status: item.touserid.online
+            })
+        }
+
+
+        // navigation.navigate('Chat', {
+        //     //  socketId: item.socketid,
+        //     userFirstName: item.firstName,
+        //     userLastName: item.lastName,
+        //     userId: item.user,
+        //     profilePic: item.profilepic,
+        //     status: item.online
+        // })
+
         // }
+    }
+    const onPressGroup = (item) => {
+        // if (item.socketid != '') {
+        clearInterval(interval.current)
+        setStoreData(true);
+        onEventPress(item);
+        console.log('hhgg', item.name)
+        navigation.navigate('GroupChat', {
+            //  socketId: item.socketid,
+            userFirstName: item.name,
+            //   userLastName: item.fromuserid.lastName,
+            userId: item.id,
+            profilePic: item.profilepic,
+            //  search: true
+            //   status: item.fromuserid.online
+        })
+
     }
 
     const renderUserList = ({ item }) => {
@@ -97,12 +160,25 @@ export default function ChatListScreen({ navigation, route }) {
                         </View>
                     }
                 </View>
-                <View style={{ flexDirection: 'row', paddingVertical: 10, flex: 1, alignItems: 'center', marginLeft: 15, borderBottomWidth: 0.2, borderColor: 'gray' }}>
+                <View style={{
+                    flexDirection: 'row',
+                    paddingVertical: 10,
+                    flex: 1,
+                    alignItems: 'center',
+                    marginLeft: 15,
+                    borderBottomWidth: 0.2,
+                    borderColor: 'gray'
+                }}>
                     <TouchableOpacity style={{ flex: 1 }}
                         onPress={() => { onPress(item) }}
                     >
-                        <Text style={{ fontSize: 20, }}>{item.firstName} {item.lastName}</Text>
-                        <Text style={{}}>message</Text>
+                        {item.touserid.id == CommonUtilsObj.EmployeDetails[0].id ?
+                            <Text style={{ fontSize: 20, }}>{item.fromuserid.firstName} {item.fromuserid.lastName}</Text>
+                            :
+                            <Text style={{ fontSize: 20, }}>{item.touserid.firstName} {item.touserid.lastName}</Text>
+                        }
+
+                        <Text style={{}}>{item.message}</Text>
                         {/* <View style={{ borderWidth: 0.5 }}></View> */}
                     </TouchableOpacity>
                     {item.count != undefined &&
@@ -116,6 +192,43 @@ export default function ChatListScreen({ navigation, route }) {
                                 shadowRadius: 3, elevation: 5,
                             }}>{item.count}</Text>
                         </View>}
+                </View>
+
+            </View>
+        )
+    }
+
+    const renderGroupList = ({ item }) => {
+        return (
+            <View style={{ marginLeft: 10, flexDirection: 'row', alignItems: 'center', }}>
+                {/* marginBottom: 25, marginTop: 10  */}
+
+                <View style={{}}>
+                    <Image source={require('../../../../Assets/Image/EmptyProfile.jpg')}
+                        style={{ width: 45, height: 45, borderRadius: 40, marginLeft: 5 }}
+                    />
+                    {/* {item.online == 'Y' &&
+                        <View style={{ position: 'absolute', bottom: -5, right: -1 }}>
+                            <Octicons name='dot-fill' size={25} color='green' />
+                        </View>
+                    } */}
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    paddingVertical: 10,
+                    flex: 1,
+                    alignItems: 'center',
+                    marginLeft: 15,
+                    borderBottomWidth: 0.2,
+                    borderColor: 'gray'
+                }}>
+                    <TouchableOpacity style={{ flex: 1 }}
+                        onPress={() => { onPressGroup(item.room) }}
+                    >
+                        <Text style={{ fontSize: 20, }}>{item.room.name}</Text>
+                        <Text style={{}}>message</Text>
+                        {/* <View style={{ borderWidth: 0.5 }}></View> */}
+                    </TouchableOpacity>
                 </View>
 
             </View>
@@ -179,7 +292,7 @@ export default function ChatListScreen({ navigation, route }) {
     };
 
     return (
-        <SafeAreaView >
+        <SafeAreaView style={{ flex: 1 }}>
             <ProgressLoader
                 visible={loading}
                 isModal={true}
@@ -193,7 +306,18 @@ export default function ChatListScreen({ navigation, route }) {
                 data={userChatList}
                 renderItem={renderUserList}
                 keyExtractor={(item, index) => index.toString()}
-                style={{ marginTop: storeData == false ? 60 : 0 }}
+                style={{ marginTop: storeData == false ? 60 : 0, }}
+            />
+            {groupDetails.length > 0 &&
+                <Text style={{ marginTop: 20, fontSize: 20, marginHorizontal: 20, fontWeight: 'bold' }}>
+                    Groups
+                </Text>
+            }
+            <FlatList
+                data={groupDetails}
+                renderItem={renderGroupList}
+                keyExtractor={(item, index) => index.toString()}
+                style={{ marginTop: 15, }}
             />
             {storeData == false &&
                 <Animated.View
@@ -224,7 +348,7 @@ export default function ChatListScreen({ navigation, route }) {
                             fadeIn(),
                                 setTimeout(() => {
                                     setStoreData(true),
-                                        socket.emit('getuserlist', CommonUtilsObj.EmployeDetails[0].user)
+                                        socket.emit('getuserlist', CommonUtilsObj.EmployeDetails[0].id)
                                 }, 300);
                         }}>
                             {/* <TouchableOpacity onPress={() => { fadeOut() }}> */}
@@ -271,7 +395,7 @@ export default function ChatListScreen({ navigation, route }) {
                 backdropOpacity={0}
             >
                 <View style={{ backgroundColor: 'white', padding: 10, borderRadius: 10 }}>
-                    <TouchableOpacity onPress={() => { setGroup(false), navigation.navigate('CreateGroup') }}>
+                    <TouchableOpacity onPress={() => { setGroup(false), navigation.navigate('GroupName') }}>
                         <Text>New Group</Text>
                     </TouchableOpacity>
                 </View>

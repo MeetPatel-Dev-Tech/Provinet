@@ -60,13 +60,13 @@ const App = () => {
 
   const offlineStatus = () => {
     if (CommonUtilsObj.EmployeDetails != null) {
-      console.log('userid', CommonUtilsObj.EmployeDetails[0].user)
+      console.log('employeeid', CommonUtilsObj.EmployeDetails[0].id)
       let socket = io(Constant.socketLocationURL, {
-        query: { id: CommonUtilsObj.EmployeDetails[0].user },
+        query: { id: CommonUtilsObj.EmployeDetails[0].id },
         reconnectionDelayMax: 2000,
       });
 
-      socket.emit('offline', CommonUtilsObj.EmployeDetails[0].user)
+      socket.emit('offline', CommonUtilsObj.EmployeDetails[0].id)
 
       // socket.on('offline', ex => {
       //   console.log('response', ex)
@@ -76,14 +76,13 @@ const App = () => {
   const onlineStatus = () => {
     console.log('gg', CommonUtilsObj.EmployeDetails)
     if (CommonUtilsObj.EmployeDetails != null) {
-      console.log('userid', CommonUtilsObj.EmployeDetails[0].user)
-      console.log('socketId', CommonUtilsObj.EmployeDetails[0].socketid)
+      console.log('employeeid', CommonUtilsObj.EmployeDetails[0].id)
       let socket = io(Constant.socketLocationURL, {
-        query: { id: CommonUtilsObj.EmployeDetails[0].user },
+        query: { id: CommonUtilsObj.EmployeDetails[0].id },
         reconnectionDelayMax: 2000,
       });
 
-      socket.emit('online', CommonUtilsObj.EmployeDetails[0].user)
+      socket.emit('online', CommonUtilsObj.EmployeDetails[0].id)
 
       // socket.on('online', ex => {
       //   console.log('dddddd', ex)

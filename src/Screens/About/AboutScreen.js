@@ -19,7 +19,7 @@ export default function AboutScreen({ navigation }) {
 
         const unsubscribe = navigation.addListener('focus', () => {
             setTimeout(() => {
-                getEmployePunchInOutDetails();
+                // getEmployePunchInOutDetails();
                 //   Allpunchinout();
                 //   WeeklyWorkingHour();
                 // userDailyAttendance();
@@ -37,12 +37,7 @@ export default function AboutScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-
-            <Text style={{ marginTop: 50 }} onPress={() => navigation.navigate('Attendance')}>hi</Text>
-            <View style={{ marginTop: 30, height: 200, backgroundColor: 'red' }}>
-                <Chats height={20} width={20} />
-                <Chat height={20} width={20} />
-            </View>
+            <Text>work in progress...</Text>
         </View>
     );
 
@@ -52,9 +47,7 @@ export default function AboutScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        flexDirection: 'column',
-        backgroundColor: 'white',
+        flex: 1, alignItems: 'center', justifyContent: 'center'
     },
     preview: {
         flex: 1,

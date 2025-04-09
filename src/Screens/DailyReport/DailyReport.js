@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import { View, Text, LayoutAnimation, UIManager, SafeAreaView, ScrollView, Dimensions, TextInput, FlatList, TouchableOpacity, Platform, Image, SliderBase, Alert } from "react-native";
 import Octicons from 'react-native-vector-icons/Octicons';
 import moment from 'moment';
-import { GetApi } from '../../Api/Api';
+import ProgressLoader from 'rn-progress-loader';
+import { GetApi, PostApi } from '../../Api/Api';
 import Constant from '../../CommonFiles/Constant';
 import { ArrowIcon, EllipseGreen, Timer, EllipseParpale, EllipseRed, EllipseYellow, Logout } from '../../CommonFiles/SvgFile';
 import { CommonUtilsObj } from '../../Utils/CommonUtils';
@@ -18,6 +19,8 @@ export default function DailyReport({ navigation }) {
     const [show, setShow] = useState(false);
     const [ids, setIds] = useState('');
     const [selectedIndex, setSelectedIndex] = useState();
+    const [loading, setLoading] = useState(false);
+    const [ind, setInd] = useState('');
 
 
     useEffect(() => {
@@ -37,39 +40,111 @@ export default function DailyReport({ navigation }) {
         userAllpunchInOut();
     }, []);
 
-    const userAllpunchInOut = async () => {
-        const ResponseData = await GetApi(Constant.DailyAttendanceURL + CommonUtilsObj.EmployeDetails[0].user)
+    // const userAllpunchInOut = async () => {
+    //     const ResponseData = await GetApi(Constant.DailyAttendanceURL + 29)
+    //     console.log('DailyAttendanceURL', ResponseData);
+    //     setDailtAttendance(ResponseData.data);
+    // }
+    const userAllpunchInOut = async (month) => {
+        setLoading(true)
+        let data = ''
+        if (month == 'Jan') {
+            data = {
+                month: 1
+            }
+        } else if (month == 'Feb') {
+            data = {
+                month: 2
+            }
+        } else if (month == 'Mar') {
+            data = {
+                month: 3
+            }
+        } else if (month == 'Apr') {
+            data = {
+                month: 4
+            }
+        } else if (month == 'May') {
+            data = {
+                month: 5
+            }
+        } else if (month == 'June') {
+            data = {
+                month: 6
+            }
+        } else if (month == 'July') {
+            data = {
+                month: 7
+            }
+        } else if (month == 'Aug') {
+            data = {
+                month: 8
+            }
+        } else if (month == 'Sep') {
+            data = {
+                month: 9
+            }
+        } else if (month == 'Oct') {
+            data = {
+                month: 10
+            }
+        } else if (month == 'Nov') {
+            data = {
+                month: 11
+            }
+        } else if (month == 'Dec') {
+            data = {
+                month: 12
+            }
+        } else {
+            const current = moment().format('mmm');
+            console.log('hh', current)
+            data = {
+                month: ''
+            }
+        }
+
+
+
+        // const data = {
+        //     month: 10
+        // }
+        const ResponseData = await PostApi(Constant.KmonthPunchInOutURL, data, false)
         console.log('DailyAttendanceURL', ResponseData);
-        setDailtAttendance(ResponseData.data);
+        if (ResponseData.status == 200) {
+            setLoading(false)
+            setDailtAttendance(ResponseData.data)
+        } else {
+            setLoading(false)
+        }
     }
 
     const data = [
-        { id: 1, name: 'jan' },
-        { id: 2, name: 'fab' },
-        { id: 3, name: 'mar' },
-        { id: 4, name: 'apr' },
-        { id: 5, name: 'may' },
-        { id: 6, name: 'june' },
-        { id: 7, name: 'july' },
-        { id: 8, name: 'aug' },
-        { id: 9, name: 'sep' },
-        { id: 10, name: 'aug' },
-        { id: 11, name: 'nov' },
-        { id: 12, name: 'dec' },
+        { id: 1, name: 'Jan' },
+        { id: 2, name: 'Feb' },
+        { id: 3, name: 'Mar' },
+        { id: 4, name: 'Apr' },
+        { id: 5, name: 'May' },
+        { id: 6, name: 'June' },
+        { id: 7, name: 'July' },
+        { id: 8, name: 'Aug' },
+        { id: 9, name: 'Sep' },
+        { id: 10, name: 'Oct' },
+        { id: 11, name: 'Nov' },
+        { id: 12, name: 'Dec' },
     ]
 
-    const renderData = ({ item }) => {
+    const renderData = ({ item, index }) => {
         return (
-            <View style={{ flex: 1, marginRight: 50, marginLeft: 40 }}>
-                <Text>{item.name}</Text>
-            </View>
+            <TouchableOpacity onPress={() => { userAllpunchInOut(item.name), setInd(index) }}
+                style={{ flex: 1, marginRight: 50, marginLeft: 40 }}>
+                <Text style={{ color: ind == index ? Constant.darkturquoise : 'black' }}>{item.name}</Text>
+            </TouchableOpacity>
         )
     }
 
     setTimeout(() => {
-        console.log('----acrtive screen -----',)
         if (ref != null) {
-            console.log('---qqqqqqqqqqqqqqqq------')
             ref.scrollToIndex({
                 animated: true,
                 index: count,
@@ -88,8 +163,10 @@ export default function DailyReport({ navigation }) {
     const DateChange = (date) => {
 
         const new_date = moment(date)
+        console.log('ff', new_date)
         //   const data = new_date.add(1, 'day')
         const data1 = new_date.day()
+        console.log('date', data1)
 
         if (data1 == 0) {
             return 'Sun'
@@ -109,11 +186,12 @@ export default function DailyReport({ navigation }) {
 
     }
     const DateChange1 = (date) => {
-
+        console.log('ddd', date)
         const new_date = moment(date)
+        console.log('pp', new_date)
         //   const data = new_date.add(1, 'day')
         const data1 = new_date.format('DD')
-
+        console.log('dd', data1)
 
         return data1
 
@@ -258,9 +336,10 @@ export default function DailyReport({ navigation }) {
 
 
     const renderAllDayAttendanceReport = ({ item, index }) => {
+        console.log('d', item.punchinout[0].intime)
         return (
             <View style={{
-                marginTop: 10,
+                marginTop: 5, marginBottom: 5,
                 backgroundColor: 'white',
                 borderRadius: 20,
                 shadowColor: 'black',
@@ -274,19 +353,19 @@ export default function DailyReport({ navigation }) {
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
 
 
-                    <View style={{ backgroundColor: RenderBackgroundColor(item.date), height: 70, width: 70, justifyContent: 'center', borderRadius: 10 }}>
+                    <View style={{ backgroundColor: RenderBackgroundColor(item.createdOn), height: 70, width: 70, justifyContent: 'center', borderRadius: 10 }}>
                         <Text style={{ fontWeight: 'bold', textAlign: 'center', }}>
-                            {DateChange(item.date)}
+                            {DateChange(item.createdOn)}
                         </Text>
                         <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
-                            {DateChange1(item.date)}
+                            {DateChange1(item.createdOn)}
                         </Text>
                         <View style={{
                             position: 'absolute',
                             top: -10,
                             left: 23,
                             alignItems: 'center',
-                            backgroundColor: renderAbsuluteClr(item.date),
+                            backgroundColor: renderAbsuluteClr(item.createdOn),
                             padding: 5,
                             borderRadius: 15,
                         }}>
@@ -298,7 +377,8 @@ export default function DailyReport({ navigation }) {
                             flex: 1, alignItems: 'center'
                         }}>
                             <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Hours</Text>
-                            <Text style={{}}>{decimalToHours(item.hours)}</Text>
+                            {/* <Text style={{}}>{decimalToHours(item.hours)}</Text> */}
+                            <Text style={{}}>{item.production}</Text>
                         </View>
                         <View style={{ width: '1%' }}>
                             <View style={{ borderLeftWidth: 1, borderColor: 'gray', flex: 1, borderStyle: 'dashed' }}>
@@ -310,7 +390,8 @@ export default function DailyReport({ navigation }) {
                             alignItems: 'center'
                         }}>
                             <Text style={{ fontWeight: 'bold' }}>Brake Time</Text>
-                            <Text style={{ textAlign: 'center' }}>{decimalToHours(item.breakTime)}</Text>
+                            {/* <Text style={{ textAlign: 'center' }}>{decimalToHours(item.breakTime)}</Text> */}
+                            <Text style={{ textAlign: 'center' }}>{item.break}</Text>
                         </View>
                     </View>
                     <View>
@@ -363,7 +444,7 @@ export default function DailyReport({ navigation }) {
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, marginLeft: 25 }}>
                         <View style={{ alignItems: 'center' }}>
                             <View style={{
-                                backgroundColor: '#816DF0',
+                                backgroundColor: renderAbsuluteClr(item.date),
                                 padding: 5,
                                 borderRadius: 15,
                                 shadowColor: 'black',
@@ -378,7 +459,7 @@ export default function DailyReport({ navigation }) {
 
                             </View>
                             <View style={{
-                                backgroundColor: '#816DF0',
+                                backgroundColor: renderAbsuluteClr(item.date),
                                 padding: 5,
                                 borderRadius: 15,
                                 shadowColor: 'black',
@@ -389,6 +470,9 @@ export default function DailyReport({ navigation }) {
                             }}>
                                 <Timer height={15} width={15} />
                             </View>
+                            <View style={{ flex: 1, borderLeftWidth: 1, paddingVertical: 10, borderColor: 'gray', alignItems: 'center', justifyContent: 'center' }}>
+
+                            </View>
                         </View>
                         <View style={{ marginLeft: 10, justifyContent: 'center', flex: 1 }}>
                             <View>
@@ -397,10 +481,17 @@ export default function DailyReport({ navigation }) {
                                 </Text>
                             </View>
                             <View style={{ flex: 1, paddingVertical: 10, }}>
-                                <Text>10:50PM</Text>
+                                <Text>{item.punchinout[item.punchinout.length - 1].intime}</Text>
                             </View>
                             <View style={{}}>
                                 <Text>Punch out at</Text>
+                            </View>
+                            <View style={{ flex: 1, paddingVertical: 10, }}>
+                                {(item.punchinout[0].outtime == null && item.punchinout[1] != undefined) ?
+                                    <Text>{item.punchinout[1].outtime}</Text>
+                                    : <Text>{item.punchinout[0].outtime}</Text>
+                                }
+
                             </View>
                         </View>
                     </View>
@@ -417,12 +508,31 @@ export default function DailyReport({ navigation }) {
         )
     }
 
+    const EmptyList = () => {
+        return (
+            <View style={{ marginTop: 50 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>
+                    No records to display
+                </Text>
+            </View>
+        )
+    }
+
 
     return (
         <SafeAreaView style={{
             flex: 1,
             backgroundColor: Constant.darkturquoise
         }}>
+            <ProgressLoader
+                visible={loading}
+                isModal={true}
+                isHUD={true}
+                hudColor={'#fff'}
+                height={200}
+                width={200}
+                color={'#000'}
+            />
             <View style={{
                 marginTop: 10,
                 flex: 1,
@@ -509,6 +619,7 @@ export default function DailyReport({ navigation }) {
                         <FlatList showsVerticalScrollIndicator={false}
                             data={dailyAttendance}
                             renderItem={renderAllDayAttendanceReport}
+                            // ListEmptyComponent={EmptyList}
                             keyExtractor={(item, index) => index.toString()}
                         />
                         {/* <AccordionList

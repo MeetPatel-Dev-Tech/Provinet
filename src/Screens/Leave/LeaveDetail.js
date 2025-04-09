@@ -20,7 +20,6 @@ import { CommonUtilsObj } from '../../Utils/CommonUtils';
 import CustomBorderButton from '../../Components/CustomButton/CustomBorderButton';
 import { ErrorToast, SuccessToast } from '../ToastMessage/Toast';
 import Message from '../../CommonFiles/Message';
-import { Plus } from '../../CommonFiles/SvgFile';
 
 export default function LeaveDetail({ navigation }) {
     let rowRefs = new Map();
@@ -605,19 +604,10 @@ export default function LeaveDetail({ navigation }) {
                     {/* <View style={{ marginTop: 10, marginHorizontal: 20, justifyContent: 'flex-end', flex: 1, marginBottom: 20 }}>
                         <CustomButton text='applied for leave' onPress={() => navigation.navigate('ApplieLeave', { isEdit: false })} />
                     </View> */}
-
-                    <View style={{
-                        position: 'absolute', bottom: 20, right: 20, padding: 15,
-                        borderRadius: 40,
-                        backgroundColor: Constant.darkturquoise,
-                        shadowColor: 'black',
-                        shadowOffset: { width: 2, height: 5 },
-                        shadowOpacity: 1,
-                        shadowRadius: 2,
-                        elevation: 3,
-                    }}>
+                    <View style={{ position: "absolute", bottom: 20, right: 20, padding: 15, borderRadius: 30, backgroundColor: Constant.darkturquoise }}>
+                        {/* <TouchableOpacity onPress={() => navigation.navigate('ApplieLeave', { isEdit: false })}> */}
                         <TouchableOpacity onPress={() => { setAppliedLeaveModalVisible(true), setIsEdit(false) }}>
-                            <Plus height={20} width={20} />
+                            <FontAwesome5 name='plus' size={20} color='white' />
                         </TouchableOpacity>
                     </View>
                 </View>

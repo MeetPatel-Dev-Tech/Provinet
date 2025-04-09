@@ -20,9 +20,9 @@ export default function Holiday() {
 
     const getHolidays = async () => {
         setLoading(true);
-        const responseData = await GetApi(Constant.HolidayURL)
+        const responseData = await GetApi(Constant.KholidayURL)
         console.log('Holidays', responseData.data)
-        if (responseData.status == 'success') {
+        if (responseData.status == 200) {
             setHolidays(responseData.data);
             setLoading(false);
             console.log('<<<<Holidays>>>>', responseData.data)
@@ -58,6 +58,16 @@ export default function Holiday() {
         )
     }
 
+    const EmptyList = () => {
+        return (
+            <View style={{ marginTop: 50, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>
+                    No records to display
+                </Text>
+            </View>
+        )
+    }
+
     return (
         <SafeAreaView style={CommonStyle.SafeAreaView}>
             <ProgressLoader
@@ -73,6 +83,8 @@ export default function Holiday() {
                 <FlatList
                     data={holidays}
                     renderItem={renderHolidayCard}
+                    ListEmptyComponent={EmptyList}
+                    keyExtractor={(item, index) => index.toString()}
                 />
             }
         </SafeAreaView>

@@ -26,23 +26,12 @@ export default function News() {
         // });
     }, []);
 
-    const data = [
-        { name: 'meet', image: require('../../Assets/Icon/News.png') },
-        { name: 'meet', image: require('../../Assets/Icon/News.png') },
-        { name: 'meet', image: require('../../Assets/Icon/News.png') },
-        { name: 'meet', image: require('../../Assets/Icon/News.png') },
-        { name: 'meet', image: require('../../Assets/Icon/News.png') },
-        { name: 'meet', image: require('../../Assets/Icon/News.png') },
-        { name: 'meet', image: require('../../Assets/Icon/News.png') },
-        { name: 'meet', image: require('../../Assets/Icon/News.png') },
-        { name: 'meet', image: require('../../Assets/Icon/News.png') },
-    ]
 
     const getNews = async () => {
         setLoading(true);
-        const responseData = await GetApi(Constant.NewsURL)
+        const responseData = await GetApi(Constant.KnewsURL)
         console.log('<<<<<<<<<<<<<<<<<', responseData)
-        if (responseData.status == 'success') {
+        if (responseData.status == 200) {
             setNews(responseData.data);
             setLoading(false);
         } else {
@@ -115,6 +104,16 @@ export default function News() {
         )
     }
 
+    const EmptyList = () => {
+        return (
+            <View style={{ marginTop: 50, alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>
+                    No records to display
+                </Text>
+            </View>
+        )
+    }
+
     return (
         <SafeAreaView style={CommonStyle.SafeAreaView}>
             <ProgressLoader
@@ -130,6 +129,8 @@ export default function News() {
                 <FlatList
                     data={news}
                     renderItem={RenderNewsList}
+                    ListEmptyComponent={EmptyList}
+                    keyExtractor={(item, index) => index.toString()}
                 />
             }
         </SafeAreaView>

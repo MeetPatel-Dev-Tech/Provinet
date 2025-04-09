@@ -20,9 +20,9 @@ export default function SettingScreen({ navigation }) {
         const unsubscribe = navigation.addListener('focus', () => {
             setTimeout(() => {
                 //     getEmployePunchInOutDetails();
-                Allpunchinout();
-                WeeklyWorkingHour();
-                usermonthlyworkinghour();
+                //    Allpunchinout();
+                //   WeeklyWorkingHour();
+                //   usermonthlyworkinghour();
                 //     // userDailyAttendance();
             }, 1000);
         });
@@ -62,26 +62,6 @@ export default function SettingScreen({ navigation }) {
         console.log('usermonthlyworkinghour', ResponseData.data)
         setWeeklyAttendance(ResponseData.data)
     }
-    // const userDailyAttendance = async () => {
-    //     const ResponseData = await GetApi(Constant.DailyAttendanceURL + CommonUtilsObj.EmployeDetails[0].user)
-    //     console.log('userDailyAttendance', ResponseData)
-    // }
-
-    // const getAddress = async (latitude, longitude) => {
-
-    //     // "latitude": "37.4217937", "longitude": "-122.083922"
-    //     let response = await GetApi(
-    //         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${Constant.KGoogleMapAPIKey}`,
-    //     );
-    //     console.log('ResLocation---------------', JSON.stringify(response));
-    //     //   return String(response.results[0].formatted_address)
-
-    // }
-
-    // const getCurrentAddressBasedOn = (latitude, longitude) => {
-    //     const data = getAddress(latitude, longitude);
-    //     return data
-    // };
 
     const getEmployePunchInOutDetails = async () => {
         const ResponseData = await GetApi(Constant.PunchInOutDetailsURL + CommonUtilsObj.EmployeDetails[0].user)
@@ -89,12 +69,6 @@ export default function SettingScreen({ navigation }) {
         setDailtAttendance(ResponseData.data)
     }
 
-
-    const data = [
-        'DailyReport',
-        'WeeklyReport',
-        'MonthlyReport',
-    ]
 
     const renderWeeklyHourList = ({ item }) => {
         return (
@@ -160,45 +134,8 @@ export default function SettingScreen({ navigation }) {
     }
 
     return (
-        <View style={{ marginHorizontal: 20, marginBottom: 150 }}>
-            <View style={{ marginTop: 20 }}>
-                <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 10, color: 'green' }}>Attendence Details</Text>
-
-                <SelectDropdown
-                    data={data}
-                    onSelect={(selectedItem, index) => {
-                        setSelectedIndex(index);
-                        getEmployePunchInOutDetails();
-                        WeeklyWorkingHour();
-                        console.log('..........')
-                    }}
-                    // buttonTextAfterSelection={(selectedItem, index) => {
-                    //     console.log('vvvvvvvvv', selectedItem)
-                    //     return selectedItem.value
-                    // }}
-                    rowTextForSelection={(item, index) => {
-                        // text represented for each item in dropdown
-                        // if data array is an array of objects then return item.property to represent item in dropdown
-                        return item
-                    }}
-                    buttonStyle={style.ButtonStyle}
-                    dropdownIconPosition='right'
-                    renderSearchInputRightIcon={() =>
-                        <Image source={require('../../Assets/Image/DropDown.png')} style={{ height: 20 }} />
-                    }
-                />
-            </View>
-
-            {selectedIndex == 0 &&
-                <FlatList showsVerticalScrollIndicator={false}
-                    data={dailyAttendance}
-                    renderItem={renderAttendanceList}
-                />}
-            {selectedIndex == 1 &&
-                <FlatList showsVerticalScrollIndicator={false}
-                    data={weeklyAttendance}
-                    renderItem={renderWeeklyHourList}
-                />}
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text>work in progress...</Text>
         </View>
     )
 }

@@ -19,7 +19,7 @@ import moment from 'moment';
 import { GetApi } from '../../../Api/Api';
 import Constant from '../../../CommonFiles/Constant';
 import { CommonUtilsObj } from '../../../Utils/CommonUtils';
-import { ArrowIcon, CrossIcon, Plus, Timer } from '../../../CommonFiles/SvgFile';
+import { ArrowIcon, Timer } from '../../../CommonFiles/SvgFile';
 
 export default function TimeSheet({ navigation }) {
 
@@ -28,7 +28,6 @@ export default function TimeSheet({ navigation }) {
     const [count, setCount] = useState(0);
     const [show, setShow] = useState(false);
     const [ids, setIds] = useState('');
-    const [selectedIndex, setSelectedIndex] = useState();
 
     useEffect(() => {
         userAllpunchInOut();
@@ -213,7 +212,7 @@ export default function TimeSheet({ navigation }) {
     }
 
 
-    const renderAllDayAttendanceReport = ({ item, index }) => {
+    const renderAllDayAttendanceReport = ({ item }) => {
         return (
             <View style={{
                 marginTop: 10,
@@ -271,7 +270,7 @@ export default function TimeSheet({ navigation }) {
                     </View>
                     <View>
                         <TouchableOpacity style={{
-                            transform: [{ rotate: selectedIndex == index ? '90deg' : '0deg' }],
+                            //transform: renderRotateIcon(item.id),
                             backgroundColor: '#F3F3F3',
                             padding: 5,
                             borderRadius: 5,
@@ -286,7 +285,6 @@ export default function TimeSheet({ navigation }) {
                             onPress={() => {
                                 setShow(!show);
                                 addUserId(item.id);
-                                setSelectedIndex(selectedIndex == index ? null : index)
                                 //    renderRotateIcon(item.id)
                                 // setId(item.id);
                                 // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeIn);
@@ -313,52 +311,7 @@ export default function TimeSheet({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                {selectedIndex == index &&
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, marginLeft: 25 }}>
-                        <View style={{ alignItems: 'center' }}>
-                            <View style={{
-                                backgroundColor: '#816DF0',
-                                padding: 5,
-                                borderRadius: 15,
-                                shadowColor: 'black',
-                                shadowOffset: { width: 2, height: 5 },
-                                shadowOpacity: 1,
-                                shadowRadius: 2,
-                                elevation: 3,
-                            }}>
-                                <Timer height={15} width={15} />
-                            </View>
-                            <View style={{ flex: 1, borderLeftWidth: 1, paddingVertical: 10, borderColor: 'gray', alignItems: 'center', justifyContent: 'center' }}>
-
-                            </View>
-                            <View style={{
-                                backgroundColor: '#816DF0',
-                                padding: 5,
-                                borderRadius: 15,
-                                shadowColor: 'black',
-                                shadowOffset: { width: 2, height: 5 },
-                                shadowOpacity: 1,
-                                shadowRadius: 2,
-                                elevation: 3,
-                            }}>
-                                <Timer height={15} width={15} />
-                            </View>
-                        </View>
-                        <View style={{ marginLeft: 10, justifyContent: 'center', flex: 1 }}>
-                            <View>
-                                <Text>
-                                    Punch In at
-                                </Text>
-                            </View>
-                            <View style={{ flex: 1, paddingVertical: 10, }}>
-                                <Text>10:50PM</Text>
-                            </View>
-                            <View style={{}}>
-                                <Text>Punch out at</Text>
-                            </View>
-                        </View>
-                    </View>
-                }
+                {randerDetailView(item.id)}
             </View >
         )
     }
@@ -399,25 +352,9 @@ export default function TimeSheet({ navigation }) {
                     <FlatList showsVerticalScrollIndicator={false}
                         data={dailyAttendance}
                         renderItem={renderAllDayAttendanceReport}
-                        keyExtractor={(item, index) => index.toString()}
                     />
                 </View>
             </View>
-            <View style={{
-                position: 'absolute', bottom: 20, right: 20, padding: 15,
-                borderRadius: 40,
-                backgroundColor: Constant.darkturquoise,
-                shadowColor: 'black',
-                shadowOffset: { width: 2, height: 5 },
-                shadowOpacity: 1,
-                shadowRadius: 2,
-                elevation: 3,
-            }}>
-                <TouchableOpacity onPress={() => navigation.navigate('AddTimeZone')}>
-                    <Plus height={20} width={20} />
-                </TouchableOpacity>
-            </View>
-
         </SafeAreaView>
     )
 }

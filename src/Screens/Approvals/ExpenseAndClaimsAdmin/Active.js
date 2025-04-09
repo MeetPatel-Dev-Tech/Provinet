@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, ScrollView, Dimensions, FlatList, TouchableOp
 import Modal from 'react-native-modal';
 import { TextInput } from 'react-native-paper';
 import Constant from '../../../CommonFiles/Constant';
-import { CrossIcon, DownloadIcon, Plus } from '../../../CommonFiles/SvgFile';
+import { CrossIcon, DownloadIcon } from '../../../CommonFiles/SvgFile';
 import { navigationRef } from '../../../Navigation/RootNavigation';
 
 export default function Active(props) {
@@ -78,7 +78,7 @@ export default function Active(props) {
                 elevation: 3,
             }}>
                 <TouchableOpacity onPress={() => props.navigation.navigate('Attechment')}>
-                    <Plus height={20} width={20} />
+                    <CrossIcon height={20} width={20} />
                 </TouchableOpacity>
             </View>
 

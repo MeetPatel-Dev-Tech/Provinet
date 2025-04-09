@@ -16,8 +16,8 @@ import { CredentialsContext } from '../../Components/Context/CredentialsContext'
 
 export default function SignInScreen({ navigation }) {
 
-    const [email, setEmail] = useState('meet.shekhat@provitious.com');
-    const [password, setPassword] = useState('Provitious@2022');
+    const [email, setEmail] = useState('meet1234@gmail.com');
+    const [password, setPassword] = useState('meet1234');
     const [loading, setLoading] = useState(false);
     const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
 
@@ -50,15 +50,14 @@ export default function SignInScreen({ navigation }) {
         const data = {
             email: email,
             password: password,
-            usertypeid: 1
         }
         const ResponseData = await PostApi(Constant.KLoginURL, data, false)
-        console.log('ffffffffffffffff', ResponseData.status)
-        if (ResponseData != undefined && ResponseData.status == 'success') {
-            console.log('hhhhh', ResponseData.data[0].user)
-            setSocketConnection(ResponseData.data[0].user);
+        console.log('ffffffffffffffff', ResponseData)
+        if (ResponseData != undefined && ResponseData.message == 'Login Successfully') {
+            console.log('hhhhh', ResponseData.data.id)
+            setSocketConnection(ResponseData.data.id);
             let userInfo = [];
-            userInfo.push(ResponseData.data[0]);
+            userInfo.push(ResponseData.data);
             if (Platform.OS === 'android') {
                 setLoggedEmployeDetails(JSON.stringify(userInfo));
             } else {
@@ -67,15 +66,17 @@ export default function SignInScreen({ navigation }) {
             setTimeout(() => {
                 setLoading(false);
                 SuccessToast(ResponseData.message);
-                setStoredCredentials(ResponseData.data[0])
+                setStoredCredentials(ResponseData.data)
                 //  navigation.navigate('TabNavigation')
             }, 1000);
         } else {
-            console.log('ResponseData', ResponseData)
+            ErrorToast(ResponseData.message);
+            setLoading(false);
         }
     }
 
     const setSocketConnection = (userId) => {
+        console.log('userid', userId)
         let socket = io(Constant.socketLocationURL, {
             query: { id: userId },
             reconnectionDelayMax: 2000,

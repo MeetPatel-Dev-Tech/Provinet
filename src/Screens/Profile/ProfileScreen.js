@@ -17,6 +17,9 @@ export default function ProfileScreen() {
 
     console.log('<>', CommonUtilsObj.EmployeDetails[0])
 
+    useEffect(() => {
+        //  socketconnection();
+    }, []);
 
     const onLogoutPress = () => {
 
@@ -30,6 +33,22 @@ export default function ProfileScreen() {
         });
 
         socket.emit('offline', CommonUtilsObj.EmployeDetails[0].user)
+    }
+
+    const socketconnection = () => {
+
+        console.log('id', CommonUtilsObj.EmployeDetails[0].id)
+
+        let socket = io(Constant.socketLocationURL, {
+            query: { id: CommonUtilsObj.EmployeDetails[0].id },
+            reconnectionDelayMax: 2000,
+            transports: ['websocket']
+        });
+
+        socket.on('connect', () => {
+            console.log('Connection Done');
+        });
+
     }
 
     const clearUserDetails = () => {
@@ -57,11 +76,6 @@ export default function ProfileScreen() {
             <View style={{ marginHorizontal: 20, flex: 1 }}>
                 <Text>FirstName : {CommonUtilsObj.EmployeDetails[0].firstName}</Text>
                 <Text>LastName : {CommonUtilsObj.EmployeDetails[0].lastName}</Text>
-                <Text>MiddleName : {CommonUtilsObj.EmployeDetails[0].middleName}</Text>
-                <Text>PhonrNumber : {CommonUtilsObj.EmployeDetails[0].PhoneNumber}</Text>
-                <Text>BloodGroup : {CommonUtilsObj.EmployeDetails[0].bloodgroup}</Text>
-                <Text>Position : {CommonUtilsObj.EmployeDetails[0].position}</Text>
-                <Text>Nationality : {CommonUtilsObj.EmployeDetails[0].nationality}</Text>
 
                 <View style={{ justifyContent: 'flex-end', marginBottom: 20, flex: 1 }}>
                     <CustomButton text='logout' onPress={() => { onLogoutPress() }} />

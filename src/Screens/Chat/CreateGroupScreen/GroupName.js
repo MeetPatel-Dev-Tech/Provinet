@@ -12,6 +12,9 @@ import { navigationRef } from '../../../Navigation/RootNavigation';
 import { CommonUtilsObj } from '../../../Utils/CommonUtils';
 import { CredentialsContext } from '../../../Components/Context/CredentialsContext';
 import { Cancel, Chat, Chats, RoundIcon, Selected } from '../../../CommonFiles/SvgFile';
+import CustomButton from '../../../Components/CustomButton/CustomButton';
+import { ErrorToast } from '../../ToastMessage/Toast';
+import CreateGroup from './CreateGroup';
 
 export default function GroupName({ navigation, route }) {
 
@@ -19,12 +22,12 @@ export default function GroupName({ navigation, route }) {
     const [userDetail, setUserDetail] = useState('');
     const [userSearch, setUserSearch] = useState('');
     const [groupName, setGroupName] = useState('');
-    const [userId, setUserId] = useState(route.params.userid);
-    const [selectedUserDetail, setSelectedUserDetail] = useState(route.params.user);
+    const [userId, setUserId] = useState('');
+    const [selectedUserDetail, setSelectedUserDetail] = useState('');
     const { storeData, setStoreData } = useContext(CredentialsContext);
     const [addUser, setAddUser] = useState([]);
 
-    console.log('user', userId.length)
+    // console.log('user', userId.length)
 
     const renderSelectedUserList = ({ item, index }) => {
         // console.log('item', item.selected)
@@ -47,6 +50,29 @@ export default function GroupName({ navigation, route }) {
         )
     }
 
+    const onPressHandler = () => {
+        if (groupName == '') {
+            ErrorToast('please add groupname ')
+        } else {
+            CreateGroup()
+        }
+    }
+
+    const CreateGroup = async () => {
+        const data = {
+            name: groupName
+        }
+        const responseData = await PostApi(Constant.KGroupNameURL, data, false)
+        console.log('responseData', responseData)
+        console.log('responseData.data.status', responseData.status)
+        if (responseData.status == 200) {
+            navigation.navigate('CreateGroup', {
+                id: responseData.data.id,
+                status: 'create'
+            })
+        }
+    }
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }} >
@@ -66,7 +92,6 @@ export default function GroupName({ navigation, route }) {
                         <TextInput
                             data={groupName}
                             onChangeText={e => setGroupName(e)}
-                            // keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
                             placeholder="Type group subject here..."
                             autoFocus={true}
                             //  theme={Constant.theme}
@@ -88,7 +113,7 @@ export default function GroupName({ navigation, route }) {
                 </View>
             </View>
             <View style={{ marginHorizontal: 20, marginTop: 20 }}>
-                <Text>
+                {/* <Text>
                     Participants : {userId.length}
                 </Text>
                 <FlatList
@@ -100,12 +125,15 @@ export default function GroupName({ navigation, route }) {
                     renderItem={renderSelectedUserList}
                     keyExtractor={(item, index) => index.toString()}
                     style={{ marginTop: 20, }}
-                />
+                /> */}
             </View>
-            <TouchableOpacity onPress={() => { navigation.navigate('Chats', { data: selectedUserDetail }) }}
+            {/* <TouchableOpacity onPress={() => { navigation.navigate('Chats', { data: selectedUserDetail }) }}
                 style={{ position: "absolute", bottom: 20, right: 10, flex: 1 }}>
                 <Selected height={70} width={70} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            <View style={{ marginHorizontal: 20, justifyContent: 'flex-end', flex: 1, marginBottom: 20 }}>
+                <CustomButton text='add member' onPress={() => onPressHandler()} />
+            </View>
         </SafeAreaView>
     )
 }

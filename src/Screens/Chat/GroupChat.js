@@ -11,6 +11,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { scale, verticalScale, moderateScale, moderateVerticalScale, ScaledSheet, ms } from 'react-native-size-matters';
 import moment from 'moment';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DocumentPicker from 'react-native-document-picker';
 import FileViewer from 'react-native-file-viewer';
 var RNFS = require('react-native-fs');
@@ -25,7 +26,7 @@ import { ErrorToast } from '../ToastMessage/Toast';
 import { Camera, Contact, Documents, Images, Location, Music } from '../../CommonFiles/SvgFile';
 // import { Message } from 'react-native-gifted-chat';
 
-export default function Chat({ route, navigation }) {
+export default function GroupChat({ route, navigation }) {
 
     const flatListRef = React.useRef();
     const chatList = React.useRef();
@@ -51,19 +52,11 @@ export default function Chat({ route, navigation }) {
     const [status, setStatus] = useState('');
     const [typing, setTyping] = useState('');
     const [loading, setLoading] = useState(true);
-    //console.log('status', status)
+    const [search, setSearch] = useState(route.params.search);
     const width = Dimensions.get('window').width;
     const height = Dimensions.get('window').height;
     const btnHeight = (Dimensions.get('window').width * 10.5) / 100;
 
-    // const data = [
-    //     { id: 1, name: 'Documents', image: require('../../Assets/Image/galary.png') },
-    //     { id: 2, name: 'Gallary', image: require('../../Assets/Image/galary.png') },
-    //     { id: 3, name: 'Camera', image: require('../../Assets/Image/galary.png') },
-    //     { id: 4, name: 'Location', image: require('../../Assets/Image/galary.png') },
-    //     { id: 5, name: 'Contact', image: require('../../Assets/Image/galary.png') },
-    //     { id: 6, name: 'Audio', image: require('../../Assets/Image/galary.png') },
-    // ]
     const data = [
         { id: 1, name: 'Documents', image: <Documents height={30} width={30} /> },
         { id: 2, name: 'Gallary', image: <Images height={30} width={30} /> },
@@ -80,10 +73,15 @@ export default function Chat({ route, navigation }) {
     useEffect(() => {
 
     }, []);
+
+
+
     useEffect(() => {
         navigation.setOptions({
+
             // backgroundColor: 'pink',
             //    title: (route.params.userFirstName + ' ' + route.params.userLastName),
+            //    headerShown: search,
             headerLeft: () => (
                 <>
                     <TouchableOpacity onPress={() => { onEventPress(), navigation.goBack() }}>
@@ -96,56 +94,48 @@ export default function Chat({ route, navigation }) {
                             style={{ width: 45, height: 45, borderRadius: 40, marginLeft: 5 }}
                         />
                     </TouchableOpacity>
-                    <View style={{ flexDirection: 'column', marginLeft: 10 }}>
-                        <Text style={{ fontSize: 20, }}>{(route.params.userFirstName + ' ' + route.params.userLastName)}</Text>
-                        {/* {console.log('details', status[0].user, route.params.userId, status)} */}
-                        {/* {status[0] != undefined && (status[0].user == route.params.userId) && status[0].status == 'online' &&
-                            <Text style={{ fontSize: 12, }}>{status[0].status}</Text>
-                            // <Text style={{ fontSize: 12, }}>{status[0].user} {route.params.userId}</Text>
-
-                        } */}
-                        {status == 'online' &&
-                            <Text style={{ fontSize: 12, }}>{status}</Text>
-                        }
-                    </View>
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate('GroupDetailScreen', {
+                            groupName: route.params.userFirstName,
+                            roomId: route.params.userId
+                        })
+                    }}
+                        style={{ flexDirection: 'column', marginLeft: 10 }}>
+                        <Text style={{ fontSize: 20, }}>{(route.params.userFirstName)}</Text>
+                    </TouchableOpacity>
                 </>
             ),
             headerRight: () => (
-                <TouchableOpacity onPress={() => {
-                    navigation.navigate('AudioCallScreen', {
-                        firstname: route.params.userFirstName,
-                        lastname: route.params.userLastName
-                    })
-                }}>
+                <>
                     <Ionicons name='call' size={25} style={{ marginLeft: 5 }} color={Constant.darkturquoise} />
-                </TouchableOpacity>
+                </>
             ),
         });
-    }, [status]);
+    }, [status, search]);
 
-    useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener(
-            'keyboardDidShow',
-            () => {
-                console.log('keyboardopen')
-                //  typingOn();
+    // useEffect(() => {
+    //     const keyboardDidShowListener = Keyboard.addListener(
+    //         'keyboardDidShow',
+    //         () => {
+    //             console.log('keyboardopen')
+    //             //  typingOn();
 
-            }
-        );
-        const keyboardDidHideListener = Keyboard.addListener(
-            'keyboardDidHide',
-            () => {
-                console.log('keyboardhide')
-                //typingOff();
+    //         }
+    //     );
+    //     const keyboardDidHideListener = Keyboard.addListener(
+    //         'keyboardDidHide',
+    //         () => {
+    //             console.log('keyboardhide')
+    //             //typingOff();
 
-            }
-        );
+    //         }
+    //     );
 
-        return () => {
-            keyboardDidHideListener.remove();
-            keyboardDidShowListener.remove();
-        };
-    }, [Keyboard]);
+    //     return () => {
+    //         keyboardDidHideListener.remove();
+    //         keyboardDidShowListener.remove();
+    //     };
+    // }, [Keyboard]);
 
     let socket = io(Constant.socketLocationURL, {
         query: { id: CommonUtilsObj.EmployeDetails[0].id },
@@ -154,28 +144,32 @@ export default function Chat({ route, navigation }) {
     const socketConnection = () => {
         let data = ({
             fromUserId: CommonUtilsObj.EmployeDetails[0].id,
-            toUserId: route.params.userId,
+            room: route.params.userId,
         })
         console.log('data', data)
-        socket.emit('getMessages', data)
+        socket.emit('groupgetMessages', data)
 
-        socket.on('getMessagesResponse', ex => {
+        socket.on('groupgetMessagesResponse', ex => {
             console.log('getMessagesResponse', ex.result)
             setMessage(ex.result)
         })
 
-        socket.on('image-uploaded', response => {
-            // console.log('response-------', response)
+        socket.on('groupimage-uploaded', response => {
+            // console.log('response-------', response.response.fromUserId)
             // console.log('response-------', response)
             // let msg =
             if (
                 response.response.fromUserId != CommonUtilsObj.EmployeDetails[0].id &&
-                response.response.toUserId == CommonUtilsObj.EmployeDetails[0].id
+                response.response.room == route.params.userId
             ) {
                 console.log('imageResponse')
                 setMessage((message) => [...message, {
                     filepath: response.file,
-                    fromuserid: { id: response.response.fromUserId },
+                    fromuserid: {
+                        id: response.response.fromUserId,
+                        firstName: response.response.firstName,
+                        lastName: response.response.lastName
+                    },
                     fileformat: response.response.fileFormat,
                     time: response.response.time
                 }])
@@ -202,11 +196,11 @@ export default function Chat({ route, navigation }) {
 
     };
 
-    useFocusEffect(
-        React.useCallback(() => {
-            Online_Offline();
-        }, [])
-    )
+    // useFocusEffect(
+    //     React.useCallback(() => {
+    //         Online_Offline();
+    //     }, [])
+    // )
 
     const Online_Offline = () => {
         console.log('check')
@@ -228,16 +222,17 @@ export default function Chat({ route, navigation }) {
     //     return () => clearTimeout(timer)
     // }, [chat]);
 
-    socket.on('addMessageResponse', ex => {
-        console.log('addMessageResponse1--', ex)
+    socket.on('groupaddMessageResponse', (ex) => {
+        console.log('groupaddMessageResponse--', ex)
         const data = {
-            fromuserid: { id: ex.fromUserId },
+            fromuserid: { id: ex.fromUserId, firstName: ex.firstName, lastName: ex.lastName },
             message: ex.message,
             time: moment().format(),
             date: moment().format("DD-MM-YYYY"),
             toUserId: ex.toUserId,
         }
-        if (ex.fromUserId == route.params.userId) {
+        if (ex.fromUserId !== CommonUtilsObj.EmployeDetails[0].id &&
+            ex.room == route.params.userId) {
             setMessage(message => [...message, data])
         }
         //  console.log('....', message)
@@ -299,7 +294,7 @@ export default function Chat({ route, navigation }) {
         console.log('item----', item?.docFileUri ?? false);
         let isDocFile = item?.docFileUri ?? false
         if (isDocFile == false) {
-            const url = Constant.SocketImageURL + item.filepath; //Constant.KBaseDownloadURL + item.name
+            const url = Constant.KBaseURLlocal + item.filepath; //Constant.KBaseDownloadURL + item.name
             const localFile = `${RNFS.DocumentDirectoryPath}/${item.filepath}`;
 
             console.log(url);
@@ -351,7 +346,7 @@ export default function Chat({ route, navigation }) {
             findSocketId()
         } else {
             if (File == undefined) {
-                console.log('before64--', docFileType)
+                //   console.log('before64--', File)
                 message.push({
                     filePath: docFilePlaceholderURI,
                     filepath: docFile,
@@ -369,7 +364,7 @@ export default function Chat({ route, navigation }) {
                     }, 200);
                 });
             } else {
-                console.log('before64', File.type)
+                console.log('before64',)
                 message.push({
                     filePath: { uri: File.uri },
                     filepath: File.fileName,
@@ -391,9 +386,9 @@ export default function Chat({ route, navigation }) {
     }
 
     const findSocketId = () => {
-        console.log('time', moment().format())
-        console.log('id', route.params.userId)
-        socket.emit('chat-list', route.params.userId)
+        // console.log('time', moment().format())
+        // console.log('id', route.params.userId)
+        // socket.emit('chat-list', route.params.userId)
 
         const data = {
             fromuserid: { id: CommonUtilsObj.EmployeDetails[0].id },
@@ -407,88 +402,92 @@ export default function Chat({ route, navigation }) {
         setChat('')
         setMessage([...message, data])
 
-        socket.once('chat-list-response', response => {
-            console.log('chat-list-response_____________________', response.chatList.socketid)
-            let send = ({
-                fromUserId: CommonUtilsObj.EmployeDetails[0].id,
-                toUserId: route.params.userId,
-                message: chat,
-                date: moment().format("DD-MM-YYYY"),
-                time: moment().format(),
-                toSocketId: response.chatList.socketid
-            })
-            console.log('send', send)
-
-
-            socket.emit('addMessage', send)
+        // socket.once('chat-list-response', response => {
+        console.log('route.params.userId', route.params.userId)
+        let send = ({
+            fromUserId: CommonUtilsObj.EmployeDetails[0].id,
+            room: route.params.userId,
+            message: chat,
+            date: moment().format("DD-MM-YYYY"),
+            time: moment().format(),
+            firstName: CommonUtilsObj.EmployeDetails[0].firstName,
+            lastName: CommonUtilsObj.EmployeDetails[0].lastName
         })
+        console.log('send', send)
+
+
+        socket.emit('groupaddMessage', send)
+        // })
 
     }
 
     const findImageSocketId2 = (base64ImageResp, File) => {
 
-        socket.emit('chat-list', route.params.userId)
+        // socket.emit('chat-list', route.params.userId)
 
-        socket.once('chat-list-response', response => {
-            console.log('chat-list-response', response)
-            let send = ({
-                fromUserId: CommonUtilsObj.EmployeDetails[0].id,
-                toUserId: route.params.userId,
-                fileFormat: File.type,
-                date: moment().format("DD-MM-YYYY"),
-                time: moment().format(),
-                toSocketId: response.chatList.socketid,
-                image: 'data:' +
-                    File.type +
-                    ';base64,' +
-                    base64ImageResp,
-                name: File.fileName
-            })
+        // socket.once('chat-list-response', response => {
+        // console.log('chat-list-response', response)
+        let send = ({
+            fromUserId: CommonUtilsObj.EmployeDetails[0].id,
+            room: route.params.userId,
+            fileFormat: File.type,
+            date: moment().format("DD-MM-YYYY"),
+            time: moment().format(),
+            //  toSocketId: response.chatList.socketid,
+            image: 'data:' +
+                File.type +
+                ';base64,' +
+                base64ImageResp,
+            name: File.fileName,
+            firstName: CommonUtilsObj.EmployeDetails[0].firstName,
+            lastName: CommonUtilsObj.EmployeDetails[0].lastName
+        })
 
-            setTimeout(() => {
-                socket.emit('upload-image', send)
-            }, 200);
+        setTimeout(() => {
+            socket.emit('groupupload-image', send)
+        }, 200);
 
-        }
-        )
+        // }
+        // )
 
     }
     const findImageSocketId = (base64ImageResp) => {
 
-        socket.emit('chat-list', route.params.userId)
+        // socket.emit('chat-list', route.params.userId)
 
-        socket.once('chat-list-response', response => {
-            console.log('chat-list-response', response)
-            let send = ({
-                fromUserId: CommonUtilsObj.EmployeDetails[0].id,
-                toUserId: route.params.userId,
-                fileFormat: docFileType,
-                date: moment().format("DD-MM-YYYY"),
-                time: moment().format(),
-                toSocketId: response.chatList.socketid,
-                image: 'data:' +
-                    docFileType +
-                    ';base64,' +
-                    base64ImageResp,
-                name: docFile
-            })
+        // socket.once('chat-list-response', response => {
+        // console.log('chat-list-response', response)
+        let send = ({
+            fromUserId: CommonUtilsObj.EmployeDetails[0].id,
+            room: route.params.userId,
+            fileFormat: docFileType,
+            date: moment().format("DD-MM-YYYY"),
+            time: moment().format(),
+            //  toSocketId: response.chatList.socketid,
+            image: 'data:' +
+                docFileType +
+                ';base64,' +
+                base64ImageResp,
+            name: docFile,
+            firstName: CommonUtilsObj.EmployeDetails[0].firstName,
+            lastName: CommonUtilsObj.EmployeDetails[0].lastName
+        })
 
-            setTimeout(() => {
-                socket.emit('upload-image', send)
-            }, 200);
+        setTimeout(() => {
+            socket.emit('groupupload-image', send)
+        }, 200);
 
 
-            // socket.on('image-uploaded', ex => {
-            //     console.log('image-uploaded', ex)
-            //     // props.setcount(props.count + 1)
-            //     //  setmess("")
-            // })
+        // socket.on('image-uploaded', ex => {
+        //     console.log('image-uploaded', ex)
+        //     // props.setcount(props.count + 1)
+        //     //  setmess("")
+        // })
 
-        }
-        )
+        // }
+        // )
 
     }
-
 
     const renderChatList = ({ item }) => {
         return (
@@ -505,7 +504,9 @@ export default function Chat({ route, navigation }) {
                         paddingVertical: 10,
                         paddingHorizontal: 15
                     }}>
-
+                        {(item.fromuserid.id || item.fromUserId.id) != CommonUtilsObj.EmployeDetails[0].id &&
+                            <Text style={{ marginTop: -8, marginLeft: -5, color: 'orange', marginBottom: 2 }}>{item.fromuserid.firstName} {item.fromuserid.lastName}</Text>
+                        }
                         <Text style={{ fontSize: 16 }}>{item.message}</Text>
                     </View>
                 }
@@ -529,7 +530,7 @@ export default function Chat({ route, navigation }) {
                                             {
 
                                                 backgroundColor: (item.fromuserid.id || item.fromUserId.id) != CommonUtilsObj.EmployeDetails[0].id ? '#E9ECF1' : Constant.darkturquoise,
-                                                alignItems: 'center',
+                                                //  alignItems: 'center',
                                                 paddingTop: 2,
                                                 marginBottom: 5,
                                                 borderTopLeftRadius: 20,
@@ -538,6 +539,9 @@ export default function Chat({ route, navigation }) {
                                                 borderBottomRightRadius: (item.fromuserid.id || item.fromUserId.id) == CommonUtilsObj.EmployeDetails[0].id ? 0 : 20,
                                             },
                                         ]}>
+                                        {(item.fromuserid.id || item.fromUserId.id) != CommonUtilsObj.EmployeDetails[0].id &&
+                                            <Text style={{ marginLeft: 8, marginTop: 2, color: 'orange', marginBottom: 5 }}>{item.fromuserid.firstName} {item.fromuserid.lastName}</Text>
+                                        }
                                         <View style={{ alignItems: 'center', backgroundColor: '#F1FDF3', flexDirection: 'row', borderRadius: 20 }}>
                                             <Image
                                                 style={{
@@ -557,7 +561,7 @@ export default function Chat({ route, navigation }) {
                                         </View>
                                     </View>
                                     <View style={{ alignItems: (item.fromuserid.id || item.fromUserId.id) == CommonUtilsObj.EmployeDetails[0].id ? 'flex-end' : 'flex-start' }}>
-                                        <Text style={{ marginTop: 2, fontSize: 10 }}>{moment((item.time || item.createdOn)).format("hh:mm A")}</Text>
+                                        <Text style={{ marginTop: 2, fontSize: 10 }}>{moment((item.time || item.createdOn), 'HH:mm').format("hh:mm A")}</Text>
                                     </View>
                                 </>
                             }
@@ -572,6 +576,9 @@ export default function Chat({ route, navigation }) {
                                         borderBottomLeftRadius: (item.fromuserid.id || item.fromUserId.id) == CommonUtilsObj.EmployeDetails[0].id ? 20 : 0,
                                         borderBottomRightRadius: (item.fromuserid.id || item.fromUserId.id) == CommonUtilsObj.EmployeDetails[0].id ? 0 : 20,
                                     }}>
+                                        {(item.fromuserid.id || item.fromUserId.id) != CommonUtilsObj.EmployeDetails[0].id &&
+                                            <Text style={{ marginTop: -8, marginLeft: -5, color: 'orange', marginBottom: 5 }}>{item.fromuserid.firstName} {item.fromuserid.lastName}</Text>
+                                        }
                                         <Image source={
                                             item.filePath
                                                 ? item.filePath
@@ -596,8 +603,6 @@ export default function Chat({ route, navigation }) {
                                 item.fileformat === 'audio/mpeg' &&
                                 <>
                                     <View style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
                                         maxWidth: moderateScale(250, 2),
                                         padding: 5,
                                         backgroundColor: (item.fromuserid.id || item.fromUserId.id) != CommonUtilsObj.EmployeDetails[0].id ? '#E9ECF1' : Constant.darkturquoise,
@@ -610,57 +615,29 @@ export default function Chat({ route, navigation }) {
                                         {/* <View style={{}}>
                                             
                                         </View> */}
-                                        <View style={{ marginRight: 10 }}>
-                                            <MaterialIcons name='multitrack-audio' size={40} />
-                                        </View>
-                                        <View style={{ width: '80%' }}>
-                                            <Text numberOfLines={1}>
-                                                {item.filepath}
-                                            </Text>
-                                            <Text >
-                                                Audio
-                                            </Text>
-                                        </View>
-                                        {/* </View> */}
-                                    </View>
-                                    <View style={{ alignItems: (item.fromuserid.id || item.fromUserId.id) == CommonUtilsObj.EmployeDetails[0].id ? 'flex-end' : 'flex-start' }}>
-                                        <Text style={{ marginTop: 2, fontSize: 10 }}>{moment((item.time || item.createdOn)).format("hh:mm A")}</Text>
-                                    </View>
-                                </>
-                            }
-                            {
-                                item.fileformat === 'video/mp4' &&
-                                <>
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        maxWidth: moderateScale(250, 2),
-                                        padding: 5,
-                                        backgroundColor: (item.fromuserid.id || item.fromUserId.id) != CommonUtilsObj.EmployeDetails[0].id ? '#E9ECF1' : Constant.darkturquoise,
-                                        borderTopLeftRadius: 15,
-                                        borderTopRightRadius: 15,
-                                        borderBottomLeftRadius: (item.fromuserid.id || item.fromUserId.id) == CommonUtilsObj.EmployeDetails[0].id ? 20 : 0,
-                                        borderBottomRightRadius: (item.fromuserid.id || item.fromUserId.id) == CommonUtilsObj.EmployeDetails[0].id ? 0 : 20,
-                                    }}>
-                                        {/* <View style={{ flexDirection: 'row', alignItems: 'center', }}> */}
-                                        {/* <View style={{}}>
-                                            
-                                        </View> */}
-                                        <View style={{ marginRight: 10 }}>
-                                            <MaterialIcons name='multitrack-audio' size={40} />
-                                        </View>
-                                        <View style={{ width: '80%' }}>
-                                            <Text numberOfLines={1}>
-                                                {item.filepath}
-                                            </Text>
-                                            <Text >
-                                                video
-                                            </Text>
+                                        {(item.fromuserid.id || item.fromUserId.id) != CommonUtilsObj.EmployeDetails[0].id &&
+                                            <Text style={{ marginTop: -8, marginLeft: -5, color: 'orange', marginBottom: 5 }}>{item.fromuserid.firstName} {item.fromuserid.lastName}</Text>
+                                        }
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                        }}>
+                                            <View style={{ marginRight: 10 }}>
+                                                <MaterialIcons name='multitrack-audio' size={40} />
+                                            </View>
+                                            <View style={{ width: '80%' }}>
+                                                <Text numberOfLines={1}>
+                                                    {item.filepath}
+                                                </Text>
+                                                <Text >
+                                                    Audio
+                                                </Text>
+                                            </View>
                                         </View>
                                         {/* </View> */}
                                     </View>
                                     <View style={{ alignItems: (item.fromuserid.id || item.fromUserId.id) == CommonUtilsObj.EmployeDetails[0].id ? 'flex-end' : 'flex-start' }}>
-                                        <Text style={{ marginTop: 2, fontSize: 10 }}>{moment((item.time || item.createdOn)).format("hh:mm A")}</Text>
+                                        <Text style={{ marginTop: 2, fontSize: 10 }}>{moment((item.time || item.createdOn), 'HH:mm').format("hh:mm A")}</Text>
                                     </View>
                                 </>
                             }
@@ -780,7 +757,6 @@ export default function Chat({ route, navigation }) {
                 ext == 'png' ||
                 ext == 'jpg' ||
                 ext == 'jpeg' ||
-                ext == 'mp4' ||
                 ext == 'pdf' ||
                 ext == 'doc' ||
                 ext == 'docx' ||
@@ -791,7 +767,7 @@ export default function Chat({ route, navigation }) {
                 setDocFileType(res[0].type)
                 setDocFileExt(ext)
                 setDocFilePlaceholderURI(
-                    ext == 'png' || ext == 'jpg' || ext == 'jpeg' || ext == 'mp4'
+                    ext == 'png' || ext == 'jpg' || ext == 'jpeg'
                         ? { uri: res[0].uri }
                         : require('../../Assets/Image/Profile.jpg')),
 
@@ -893,6 +869,22 @@ export default function Chat({ route, navigation }) {
             duration: 700,
             useNativeDriver: true
         }).start();
+    };
+
+    const generateColor = (text) => {
+        // const randomColor = Math.floor(Math.random() * 16777215)
+        //     .toString(16)
+        //     .padStart(6, '0');
+        // return `#${randomColor}`;
+
+
+        if (text.startsWith('t')) {
+            return 'orange';
+        } else if (text.startsWith('Y')) {
+            return 'pink'
+        } else {
+            'blue'
+        }
     };
 
 

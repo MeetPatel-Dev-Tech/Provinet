@@ -13,12 +13,11 @@ export default function CustomButton({ text, onPress, isGrayBackground }) {
             backgroundColor: isGrayBackground
               ? Constant.primaryGray
               : Constant.darkturquoise,
-            // shadowColor: 'black',
-
-            // shadowOffset: { width: 2, height: 5 },
-            // shadowOpacity: 1,
-            // shadowRadius: 2,
-            // elevation: 2,
+            shadowColor: 'black',
+            shadowOffset: { width: 2, height: 5 },
+            shadowOpacity: 1,
+            shadowRadius: 2,
+            elevation: 2,
           },
         ]}>
         <Text

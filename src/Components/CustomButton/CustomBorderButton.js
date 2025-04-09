@@ -19,11 +19,11 @@ export default function CustomBorderButton({
             backgroundColor: isGrayBackground
               ? Constant.primaryGray
               : Constant.white,
-            // shadowColor: 'black',
-            // shadowOffset: { width: 2, height: 5 },
-            // shadowOpacity: 1,
-            // shadowRadius: 2,
-            // elevation: 2,
+            shadowColor: 'black',
+            shadowOffset: { width: 2, height: 5 },
+            shadowOpacity: 1,
+            shadowRadius: 2,
+            elevation: 2,
           },
         ]}>
         <Text

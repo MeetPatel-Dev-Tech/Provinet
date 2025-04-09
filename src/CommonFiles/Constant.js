@@ -2,7 +2,19 @@ import { Dimensions, Platform } from 'react-native';
 import { CommonUtilsObj } from '../Utils/CommonUtils';
 
 const KBaseURL = 'http://45.80.152.23:4553/api/';
-//const KBaseURL = 'http://192.168.1.32:4553/api/';
+const KBaseURL1 = 'http://45.80.152.23:4569/';
+
+// Main URL
+const KBaseURLlocal = 'http://45.80.152.23:4569/'; //http://192.168.1.14:4569/
+const KSocketUrl = 'http://45.80.152.23:4570';     //http://192.168.1.14:4570
+
+// Sub URL
+const KEmployeeURL = KBaseURLlocal + 'employee/';
+const Login = KBaseURLlocal + 'admin/';
+const SocketImage = KBaseURLlocal + 'imgt/socket/';
+
+
+
 
 const KUserURL = KBaseURL + 'user/';
 const KBasePunchInOutURL = KBaseURL + 'PunchInOut/';
@@ -10,9 +22,7 @@ const KBreakURL = KBaseURL + 'userbreak/';
 const KBaseLeaveURL = KBaseURL + 'leaves/';
 const KBaseDashBoardURL = KBaseURL + 'dashboard/';
 const KViewURL = KBaseURL + 'PunchInOut/getpunchinoutimage?filename=';
-//const KViewURL = 'http://45.80.152.23:4560/';
-const KSocketUrl = 'http://45.80.152.23:4553';
-//const KSocketUrl = 'http://192.168.1.32:4553';
+
 
 const headerFormData = {
   Accept: '*/*',
@@ -37,10 +47,55 @@ class Constant {
   static headerURLEncoded = headerURLEncoded;
   static headerJSON = headerJSON;
 
-  static socketLocationURL = KSocketUrl;
-  static KViewURL = KViewURL;
-  static KLoginURL = KUserURL + 'login';
 
+
+
+  // for socket releted URL
+  static socketLocationURL = KSocketUrl;
+  static SocketImageURL = SocketImage;
+
+  // for login
+  static KLoginURL = Login + 'login';
+
+  // for groupchat
+  static KGroupNameURL = KEmployeeURL + 'room';
+  static KGroupMembereURL = KEmployeeURL + 'roommember';
+  static KDeleteMember = KEmployeeURL + 'roommember/';
+  static KRoomList = KEmployeeURL + 'getroomlist';
+  static KGroupMemberList = KEmployeeURL + 'roommembergetbyroomid/';
+
+  // for punch in out 
+  static KuploadImageURL = KEmployeeURL + 'image/punchinout';
+  static KpunchInURL = KEmployeeURL + 'punchinout';
+  static KtodayPunchinoutURL = KEmployeeURL + 'getpunchinouttoday';
+  static KmonthPunchInOutURL = KEmployeeURL + 'getdutyreportmonth';
+
+  // for news list
+  static KnewsURL = KEmployeeURL + 'getnewslist';
+
+  // for holiday list
+  static KholidayURL = KEmployeeURL + 'getholidaylist';
+
+  // for portfoliolis list
+  static KportfolioURL = KEmployeeURL + 'getportfoliolist';
+
+  // for get all employee
+  static GetEployeList = KEmployeeURL + 'getemployeelist';
+
+  // for annoustment list
+  static KannousmentURL = KEmployeeURL + 'getannouncementlist';
+
+
+
+
+
+
+
+
+
+
+
+  static KViewURL = KViewURL;
   static ImageURL = KBasePunchInOutURL + 'addimagepunchinout/'
   static PunchInURL = KBasePunchInOutURL + 'addattendence'
   static BreakTimeURL = KBreakURL + 'userupdatebreak'

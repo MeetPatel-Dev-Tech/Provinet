@@ -1,19 +1,20 @@
+import { customHeaders, headerURLEncoded } from "../Utils/CommonUtils";
 
 
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
-let headerURLEncoded = {
-    // Accept: '*/*',
-    // 'Content-Type': 'multipart/form-data',
-};
+// let headerURLEncoded = {
+//     Accept: '*/*',
+//     'Content-Type': 'multipart/form-data',
+// };
 
 
 const PostApi = async (url, data, patch) => {
     console.log('data', data)
     const requestOptions = {
         method: patch == false ? 'POST' : 'PATCH',
-        headers: myHeaders,
+        headers: customHeaders,
         body: JSON.stringify(data),
         redirect: 'follow'
     };
@@ -34,7 +35,7 @@ const PostApi = async (url, data, patch) => {
 const PostApiImage = async (url, data) => {
     const requestOptions = {
         method: 'POST',
-        //   headers: {},
+        headers: headerURLEncoded,
         body: data,
         redirect: 'follow'
     };
@@ -57,7 +58,7 @@ const PostApiImage = async (url, data) => {
 const GetApi = url => {
     const requestOptions = {
         method: 'GET',
-        headers: myHeaders,
+        headers: customHeaders,
         redirect: 'follow'
     };
 
@@ -76,7 +77,7 @@ const GetApi = url => {
 const deleteApi = async url => {
     const requestOptions = {
         method: 'DELETE',
-        headers: myHeaders,
+        headers: customHeaders,
     };
     return (
         fetch(url, requestOptions)

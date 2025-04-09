@@ -6,15 +6,26 @@ import DefaultPreference from 'react-native-default-preference';
 import Constant from '../CommonFiles/Constant';
 
 
-const myHeaders = new Headers();
-myHeaders.append("Accept", "*/*");
-myHeaders.append("Content-Type", "application/json");
+// const myHeaders = new Headers();
+// myHeaders.append("Accept", "*/*");
+// myHeaders.append("Content-Type", "application/json");
 
+let userToken = '';
+let customHeaders = {
+    Accept: '*/*',
+    'Content-Type': 'application/json',
+};
+let headerURLEncoded = {
+    // Accept: '*/*',
+    // 'Content-Type': 'multipart/form-data',
+};
 
 const userInformation = new Headers();
 
 let CommonUtilsObj = () => {
     EmployeDetails = '';
+    customHeaders = JSON.parse(customHeaders);
+    headerURLEncoded = JSON.parse(headerURLEncoded);
     console.log('EmployeDetails.............', EmployeDetails)
 };
 
@@ -96,6 +107,16 @@ const getLoggedEmployeDetails = () => {
                 if (obj != '') {
                     CommonUtilsObj.EmployeDetails = obj;
                 }
+                if (obj[0].token != undefined) {
+                    CommonUtilsObj.userToken = obj[0].token; //obj.token;
+                    CommonUtilsObj.customHeaders = {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json', //"multipart/form-data",
+                        Authorization: obj[0].token,
+                    };
+                    customHeaders = { ...customHeaders, Authorization: obj[0].token };
+                    headerURLEncoded = { ...headerURLEncoded, Authorization: obj[0].token };
+                }
                 let Data = obj[0];
                 return Data
             })
@@ -123,10 +144,13 @@ const getLoggedEmployeDetails = () => {
 
 export {
     //   getFCMToken,
-    myHeaders,
+    //  myHeaders,
     userInformation,
     CommonUtilsObj,
     setLoggedEmployeDetails,
     getLoggedEmployeDetails,
-    getLiveLocation
+    getLiveLocation,
+    userToken,
+    customHeaders,
+    headerURLEncoded,
 };

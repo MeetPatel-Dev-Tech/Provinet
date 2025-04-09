@@ -28,7 +28,10 @@ import ExpenseAndClaimsUser from '../../../Screens/Approvals/ExpenseAndClaimsUse
 import ExpenseAndClaims from '../../../Screens/Approvals/ExpenseAndClaimsAdmin/ExpanseAndClaims';
 import ExpenseAndClaimsDetails from '../../../Screens/Approvals/ExpenseAndClaimsAdmin/ExpanseAndClaimsDetails';
 import AddAttechment from '../../../Screens/Approvals/ExpenseAndClaimsAdmin/AddAttechment';
-import AddTimeZone from '../../../Screens/Approvals/TimeSheet/AddTimeZone';
+import GroupChat from '../../../Screens/Chat/GroupChat';
+import GroupDetailScreen from '../../../Screens/Chat/CreateGroupScreen/GroupDetailScreen';
+import AudioCallScreen from '../../../Screens/Chat/AudioCallScreen/AudioCallScreen';
+import VideoCallScreen from '../../../Screens/Chat/VideoCallScreen/VideoCallScreen';
 ;
 
 export default function AppStackNavigation({ navigation }) {
@@ -125,6 +128,33 @@ export default function AppStackNavigation({ navigation }) {
                 })}
             />
             <Stack.Screen
+                name="GroupChat"
+                component={GroupChat}
+                options={({ navigation }) => ({
+                    title: '',
+                    headerStyle: {},
+                    headerShadowVisible: true
+                })}
+            />
+            <Stack.Screen
+                name="AudioCallScreen"
+                component={AudioCallScreen}
+                options={({ navigation }) => ({
+                    headerShown: false,
+                    headerStyle: {},
+                    headerShadowVisible: true
+                })}
+            />
+            <Stack.Screen
+                name="VideoCallScreen"
+                component={VideoCallScreen}
+                options={({ navigation }) => ({
+                    headerShown: false,
+                    headerStyle: {},
+                    headerShadowVisible: true
+                })}
+            />
+            <Stack.Screen
                 name="Profile"
                 component={ProfileScreen}
                 options={({ navigation }) => ({
@@ -152,15 +182,6 @@ export default function AppStackNavigation({ navigation }) {
             <Stack.Screen
                 name="TimeSheet"
                 component={TimeSheet}
-                options={({ navigation }) => ({
-                    title: 'Time Sheet',
-                    headerStyle: { backgroundColor: Constant.darkturquoise },
-                    headerTitleStyle: { color: 'white' }
-                })}
-            />
-            <Stack.Screen
-                name="AddTimeZone"
-                component={AddTimeZone}
                 options={({ navigation }) => ({
                     title: 'Time Sheet',
                     headerStyle: { backgroundColor: Constant.darkturquoise },
@@ -217,6 +238,15 @@ export default function AppStackNavigation({ navigation }) {
                 component={GroupName}
                 options={({ navigation }) => ({
                     title: 'New Group',
+                    headerStyle: { backgroundColor: Constant.darkturquoise },
+                    headerTitleStyle: { color: 'white' }
+                })}
+            />
+            <Stack.Screen
+                name="GroupDetailScreen"
+                component={GroupDetailScreen}
+                options={({ navigation }) => ({
+                    title: 'Group info',
                     headerStyle: { backgroundColor: Constant.darkturquoise },
                     headerTitleStyle: { color: 'white' }
                 })}

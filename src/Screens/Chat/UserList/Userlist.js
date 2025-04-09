@@ -31,7 +31,7 @@ export default function UserList({ navigation }) {
 
     useEffect(() => {
         getAllUserDetails();
-        socket.emit('getuserlist', CommonUtilsObj.EmployeDetails[0].user)
+        socket.emit('getuserlist', CommonUtilsObj.EmployeDetails[0].id)
 
         socket.on('getList', async (response) => {
             console.log('response....', response)
